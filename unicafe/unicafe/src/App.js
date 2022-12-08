@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import Statistics from "./components/Statistics";
 
 function App() {
   // tallenna napit omaan tilaansa
@@ -31,15 +32,14 @@ function App() {
         <button onClick={() => handleBadClick(setBad, bad)}>bad</button>
       </div>
       <br />
-      <div>
-        <h2>statistics</h2>
+      <Statistics>
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {Math.abs(bad)}</p>
         <p>all {allClicks.length}</p>
         <p>average {average}</p>
-        <p>positive {good ? (good / allClicks.length) * 100 : 0}</p>
-      </div>
+        <p>positive {good ? (good / allClicks.length) * 100 : 0} %</p>
+      </Statistics>
     </div>
   );
 }
