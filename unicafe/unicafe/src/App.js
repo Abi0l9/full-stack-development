@@ -6,9 +6,11 @@ function App() {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [allClicks, setAllClicks] = useState([]);
 
   const handleClick = (fn, state) => {
     fn(state + 1);
+    setAllClicks(allClicks.concat("state"));
   };
 
   return (
@@ -27,6 +29,7 @@ function App() {
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {bad}</p>
+        <p>all {allClicks.length}</p>
       </div>
     </div>
   );
