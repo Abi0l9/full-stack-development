@@ -1,5 +1,9 @@
-const Statistics = ({ children, allClicks }) => {
-  if (allClicks.length < 1) {
+import StatisticLine from "./StatisticLine";
+
+const Statistics = (props) => {
+  const { good, bad, neutral, average, allClicks, positive } = props.props;
+
+  if (allClicks < 1) {
     return (
       <div>
         <h2>statistics</h2>
@@ -10,7 +14,12 @@ const Statistics = ({ children, allClicks }) => {
   return (
     <div>
       <h2>statistics</h2>
-      {children}
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={allClicks} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={positive} />
     </div>
   );
 };
