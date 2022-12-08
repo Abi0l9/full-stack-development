@@ -32,7 +32,7 @@ function App() {
         <button onClick={() => handleBadClick(setBad, bad)}>bad</button>
       </div>
       <br />
-      <Statistics>
+      <Statistics allClicks={allClicks}>
         <p>good {good}</p>
         <p>neutral {neutral}</p>
         <p>bad {Math.abs(bad)}</p>
