@@ -37,7 +37,6 @@ const Part3 = (props) => {
 };
 
 const Content = (props) => {
-  console.log(props.parts[0].name);
   const part1 = [props.parts[0].name, props.parts[0].exercises];
   const part2 = [props.parts[1].name, props.parts[1].exercises];
   const part3 = [props.parts[2].name, props.parts[2].exercises];
