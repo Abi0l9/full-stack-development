@@ -2,21 +2,13 @@ import Part from "./Part";
 import Total from "./Total";
 
 const Content = ({ content }) => {
-  let first = content[0];
-  let second = content[1];
-  let third = content[2];
-
   return (
     <div>
-      <p>
-        {first.name} <Part exercises={first.exercises} />
-      </p>
-      <p>
-        {second.name} <Part exercises={second.exercises} />
-      </p>
-      <p>
-        {third.name} <Part exercises={third.exercises} />
-      </p>
+      {content.map((el) => (
+        <p key={el.id}>
+          {el.name} <Part exercises={el.exercises} />
+        </p>
+      ))}
       <Total total={content} />
     </div>
   );
