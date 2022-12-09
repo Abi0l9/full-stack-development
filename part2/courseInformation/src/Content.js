@@ -17,7 +17,7 @@ const Content = ({ content }) => {
       <p>
         {third.name} <Part exercises={third.exercises} />
       </p>
-      <Total total={first.exercises + second.exercises + third.exercises} />
+      <Total total={content} />
     </div>
   );
 };
