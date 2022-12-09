@@ -2,6 +2,7 @@ import Content from "./Content";
 import Header from "./Header";
 
 const Course = ({ course }) => {
+  //task completed
   return (
     <div>
       {course.map((item) => (
