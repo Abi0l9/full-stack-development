@@ -1,4 +1,6 @@
 import Part from "./Part";
+import Total from "./Total";
+
 const Content = ({ content }) => {
   let first = content[0];
   let second = content[1];
@@ -15,6 +17,7 @@ const Content = ({ content }) => {
       <p>
         {third.name} <Part exercises={third.exercises} />
       </p>
+      <Total total={first.exercises + second.exercises + third.exercises} />
     </div>
   );
 };
