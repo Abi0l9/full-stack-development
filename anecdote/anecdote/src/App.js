@@ -14,7 +14,8 @@ function App() {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
-  let random = selected;
+  // make an array of length anecdotes with all filled with zeros (0)
+  let random = selected; //initialize random with selected => 0
 
   const handleClick = () => {
     random = Math.floor(Math.random() * anecdotes.length);
@@ -26,14 +27,24 @@ function App() {
     setVotes([...votes]); // Make a new copy after each update
   };
 
+  const mostVotes = [...votes].sort((a, b) => a - b)[votes.length - 1]; // sort and get the last element
+  // console.log(votes.indexOf(mostVotes)); // get the index of vote with the most votes
+  // then, access the anecdotes with that same index.
+
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {anecdotes[selected]}
       <br />
       <p>Has {votes[selected]} votes</p>
       <br />
       <button onClick={handleVotes}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
+      <div>
+        <h2>Anecdote with the most votes</h2>
+        {anecdotes[votes.indexOf(mostVotes)]}
+        <p>Has {mostVotes} votes</p>
+      </div>
     </div>
   );
 }
