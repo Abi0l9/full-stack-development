@@ -11,7 +11,12 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    newName && setPersons(persons.concat({ name: newName }));
+    const duplicate = persons.filter((person) => person.name === newName);
+
+    newName && duplicate.length < 1
+      ? setPersons(persons.concat({ name: newName }))
+      : alert(`${newName} is already added to phonebook`);
+
     setNewName("");
   };
 
