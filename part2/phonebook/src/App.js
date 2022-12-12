@@ -1,5 +1,8 @@
 import "./App.css";
 import { useState } from "react";
+import Numbers from "./Numbers";
+import PersonForm from "./PersonForm";
+import Phonebook from "./Phonebook";
 
 function App() {
   const [persons, setPersons] = useState([
@@ -42,34 +45,18 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        Filter shown with
-        <input type="text" value={search} onChange={handleSearch} />
-      </div>
+      <Phonebook search={search} handleSearch={handleSearch} />
+
       <br />
       <br />
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input name="name" value={newName} onChange={handleNewInput} />
-        </div>
-        <div>
-          number:
-          <input name="number" value={newNumber} onChange={handleNewInput} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {persons
-        .filter((person) =>
-          person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-        )
-        .map((person) => (
-          <div key={person.name}>
-            {person.name} {person.number}
-          </div>
-        ))}
+      <PersonForm
+        handleSubmit={handleSubmit}
+        handleNewInput={handleNewInput}
+        newName={newName}
+        newNumber={newNumber}
+      />
+
+      <Numbers persons={persons} search={search} />
     </div>
   );
 }
