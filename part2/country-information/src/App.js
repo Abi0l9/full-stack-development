@@ -1,11 +1,11 @@
 import "./App.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Countries from "./Countries";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [input, setInput] = useState("");
-  const [results, setResults] = useState([]);
 
   useEffect(() => {
     console.log("event started");
@@ -19,27 +19,18 @@ function App() {
     setInput(e.target.value);
   };
 
-  const handleForm = () => {
-    const searchResults = countries
-      .filter((country) =>
-        country.name.common.toLowerCase().includes(input.toLowerCase())
-      )
-      .map((country) => country.name.common);
-
-    setResults(searchResults);
-  };
-
-  console.log(results);
   return (
-    <div>
-      <form onChange={handleForm}>
+    <div style={{ marginLeft: 10 }}>
+      <form>
         <label>find countries </label>
         <input type="text" value={input} onChange={handleChange} />
       </form>
       <div>
-        {results.length
-          ? results.map((result) => <div key={result}>{result}</div>)
-          : "Nothing to display!"}
+        {input ? (
+          <Countries countries={countries} input={input} />
+        ) : (
+          "Nothing to display!"
+        )}
       </div>
     </div>
   );
