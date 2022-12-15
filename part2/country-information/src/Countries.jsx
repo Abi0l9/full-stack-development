@@ -19,7 +19,7 @@ const Countries = ({ countries, input }) => {
     <div>
       {allCountries.length > 1 ? (
         <TenCountries ten={allCountries} />
-      ) : (
+      ) : allCountries.length < 1 ? "No result found!" : (
         <OneCountry one={allCountries} />
       )}
     </div>
