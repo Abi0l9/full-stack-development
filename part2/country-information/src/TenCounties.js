@@ -4,7 +4,10 @@ const TenCountries = ({ ten }) => {
   return (
     <div>
       {makeTen.map((country) => (
-        <div key={country.name}>{country.name}</div>
+        <div>
+          <span key={country.name}> {country.name}</span>
+          <button>show</button>
+        </div>
       ))}
     </div>
   );

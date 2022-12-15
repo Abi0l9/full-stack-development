@@ -1,11 +1,9 @@
 const OneCountry = ({ one }) => {
   const { name, capital, area, flagUrl, lang } = one[0];
-  console.log(name);
   const languages = [];
   for (let each of Object.values(lang)) {
     languages.push(each);
   }
-  console.log(languages);
   return (
     <div>
       <h1>{name}</h1>
