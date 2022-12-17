@@ -1,12 +1,11 @@
 const TenCountries = ({ ten }) => {
   const makeTen = ten.slice(0, 10);
-  console.log(makeTen);
   return (
     <div>
-      {makeTen.map((country) => (
+      {makeTen.map((country, id) => (
         <div>
           <span key={country.name}> {country.name}</span>
-          <button>show</button>
+          <button key={id}>show</button>
         </div>
       ))}
     </div>

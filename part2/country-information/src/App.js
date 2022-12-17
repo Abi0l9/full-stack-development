@@ -2,6 +2,7 @@ import "./App.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Countries from "./Countries";
+import RandomCountry from "./RandomCountry";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -29,7 +30,7 @@ function App() {
         {input ? (
           <Countries countries={countries} input={input} />
         ) : (
-          "Nothing to display!"
+          <RandomCountry countries={countries} />
         )}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import OneCountry from "./OneCountry";
-import TenCountries from "./TenCounties";
+import TenCountries from "./TenCountries";
+import RandomCountry from "./RandomCountry";
 
 const Countries = ({ countries, input }) => {
   const allCountries = countries
@@ -15,6 +16,7 @@ const Countries = ({ countries, input }) => {
         lang: country.languages,
       };
     });
+
   return (
     <div>
       {allCountries.length > 1 ? (
