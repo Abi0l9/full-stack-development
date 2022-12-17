@@ -19,10 +19,14 @@ function App() {
   const handleChange = (e) => {
     setInput(e.target.value);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setInput("");
+  };
 
   return (
     <div style={{ marginLeft: 10 }}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>find countries </label>
         <input type="text" value={input} onChange={handleChange} />
       </form>
