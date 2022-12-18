@@ -1,6 +1,5 @@
 import OneCountry from "./OneCountry";
 import TenCountries from "./TenCountries";
-import RandomCountry from "./RandomCountry";
 
 const Countries = ({ countries, input }) => {
   const allCountries = countries
@@ -21,8 +20,10 @@ const Countries = ({ countries, input }) => {
     <div>
       {allCountries.length > 1 ? (
         <TenCountries ten={allCountries} />
-      ) : allCountries.length < 1 ? "No result found!" : (
-        <OneCountry one={allCountries} />
+      ) : allCountries.length < 1 ? (
+        "No result found!"
+      ) : (
+        <OneCountry one={allCountries} input={input} />
       )}
     </div>
   );
