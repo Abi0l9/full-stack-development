@@ -32,7 +32,7 @@ function App() {
       </form>
       <div>
         {input ? (
-          <Countries countries={countries} input={input} />
+          <Countries countries={countries} setInput={setInput} input={input} />
         ) : (
           <RandomCountry countries={countries} />
         )}
