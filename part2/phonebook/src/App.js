@@ -9,8 +9,9 @@ function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-
   const [search, setSearch] = useState("");
+
+  const baseUrl = "http://localhost:3001/persons";
 
   const handleNewInput = (e) => {
     e.target.name === "name"
@@ -19,16 +20,22 @@ function App() {
   };
 
   const handleDuplicate = () => {
-    const duplicate = persons.filter((person) => person.name === newName);
+    const duplicate = persons.filter(
+      (person) => person.name === newName && person.number === newNumber
+    );
 
     newName && duplicate.length < 1
       ? setPersons(persons.concat({ name: newName, number: newNumber }))
       : alert(`${newName} is already added to phonebook`);
+    return duplicate.length;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleDuplicate();
+
+    handleDuplicate() < 1 &&
+      axios.post(baseUrl, { name: newName, number: newNumber });
 
     setNewName("");
     setNewNumber("");
@@ -39,9 +46,7 @@ function App() {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    axios.get(baseUrl).then((response) => setPersons(response.data));
   }, []);
 
   return (
