@@ -3,15 +3,13 @@ import { useEffect, useState } from "react";
 import Numbers from "./Numbers";
 import PersonForm from "./PersonForm";
 import Phonebook from "./Phonebook";
-import axios from "axios";
+import { getNotes, createNote } from "./ContactRequests";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
-
-  const baseUrl = "http://localhost:3001/persons";
 
   const handleNewInput = (e) => {
     e.target.name === "name"
@@ -35,7 +33,8 @@ function App() {
     handleDuplicate();
 
     handleDuplicate() < 1 &&
-      axios.post(baseUrl, { name: newName, number: newNumber });
+      // axios.post(baseUrl, { name: newName, number: newNumber });
+      createNote({ name: newName, number: newNumber });
 
     setNewName("");
     setNewNumber("");
@@ -46,7 +45,8 @@ function App() {
   };
 
   useEffect(() => {
-    axios.get(baseUrl).then((response) => setPersons(response.data));
+    // axios.get(baseUrl).then((response) => setPersons(response.data));
+    getNotes(setPersons);
   }, []);
 
   return (
