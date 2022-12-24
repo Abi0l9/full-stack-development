@@ -20,7 +20,7 @@ const Numbers = ({ persons, search }) => {
       <h2>Numbers</h2>
       {contacts
         .filter((person) =>
-          person.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+          person.name.toLowerCase().includes(search.toLowerCase())
         )
         .map((person, id) => (
           <div key={person.name + " " + person.id}>

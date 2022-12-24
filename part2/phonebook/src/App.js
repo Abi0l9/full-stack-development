@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Numbers from "./Numbers";
 import PersonForm from "./PersonForm";
 import Phonebook from "./Phonebook";
-import { getContacts, createContact } from "./ContactRequests";
+import { getContacts, createContact, updateContact } from "./ContactRequests";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -17,23 +17,34 @@ function App() {
       : setNewNumber(e.target.value);
   };
 
+  const newContact = {
+    name: newName,
+    number: newNumber,
+    id: !persons.length ? 1 : persons.at(-1).id + 1,
+  };
+
   const handleEmptyInputs = () => newName && newNumber;
+
   const handleDuplicate = () => {
     const duplicate = persons.filter(
-      (person) => person.name === newName && person.number === newNumber
+      (person) => person.name === newName //&& person.number === newNumber
     );
+    const duplicateId = duplicate[0]?.id;
 
-    handleEmptyInputs() && duplicate.length < 1
-      ? setPersons(
-          persons.concat({
-            name: newName,
-            number: newNumber,
-            id: !persons.length ? 1 : persons.at(-1).id + 1,
-          })
-        )
-      : !handleEmptyInputs()
-      ? alert("You can't save an empty field")
-      : alert(`${newName} is already added to phonebook`);
+    // Add new contact if fields arent empty and duplicate is none
+    handleEmptyInputs() &&
+      duplicate.length < 1 &&
+      setPersons(persons.concat(newContact));
+
+    // If field is empty
+    !handleEmptyInputs() && alert("You can't save an empty field");
+
+    //update when duplicate is true
+    duplicate.length &&
+      window.confirm(
+        `${newName} is already added to phonebook, would you like to replace it?`
+      ) &&
+      updateContact(duplicateId, newContact);
     return duplicate.length;
   };
 
@@ -42,13 +53,8 @@ function App() {
     handleDuplicate();
 
     handleDuplicate() < 1 &&
-      // axios.post(baseUrl, { name: newName, number: newNumber });
       handleEmptyInputs() &&
-      createContact({
-        name: newName,
-        number: newNumber,
-        id: !persons.length ? 1 : persons.at(-1).id + 1,
-      });
+      createContact(newContact);
 
     setNewName("");
     setNewNumber("");
@@ -59,7 +65,6 @@ function App() {
   };
 
   useEffect(() => {
-    // axios.get(baseUrl).then((response) => setPersons(response.data));
     getContacts(setPersons);
   }, []);
 
