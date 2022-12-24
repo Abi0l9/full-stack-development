@@ -2,11 +2,16 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:3001/persons";
 
-export const createNote = (newObject) => {
+export const createContact = (newObject) => {
   axios.post(baseUrl, newObject);
 };
 
-export const getNotes = (fn) => {
+export const getContacts = (fn) => {
   const request = axios.get(baseUrl);
   return request.then((response) => fn(response.data));
+};
+
+export const removeContact = (id, name) => {
+  window.confirm(`Delete ${name} from phonebook?`) &&
+    axios.delete(`${baseUrl}/${id}`);
 };

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Numbers from "./Numbers";
 import PersonForm from "./PersonForm";
 import Phonebook from "./Phonebook";
-import { getNotes, createNote } from "./ContactRequests";
+import { getContacts, createContact } from "./ContactRequests";
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -17,13 +17,22 @@ function App() {
       : setNewNumber(e.target.value);
   };
 
+  const handleEmptyInputs = () => newName && newNumber;
   const handleDuplicate = () => {
     const duplicate = persons.filter(
       (person) => person.name === newName && person.number === newNumber
     );
 
-    newName && duplicate.length < 1
-      ? setPersons(persons.concat({ name: newName, number: newNumber }))
+    handleEmptyInputs() && duplicate.length < 1
+      ? setPersons(
+          persons.concat({
+            name: newName,
+            number: newNumber,
+            id: !persons.length ? 1 : persons.at(-1).id + 1,
+          })
+        )
+      : !handleEmptyInputs()
+      ? alert("You can't save an empty field")
       : alert(`${newName} is already added to phonebook`);
     return duplicate.length;
   };
@@ -34,7 +43,12 @@ function App() {
 
     handleDuplicate() < 1 &&
       // axios.post(baseUrl, { name: newName, number: newNumber });
-      createNote({ name: newName, number: newNumber });
+      handleEmptyInputs() &&
+      createContact({
+        name: newName,
+        number: newNumber,
+        id: !persons.length ? 1 : persons.at(-1).id + 1,
+      });
 
     setNewName("");
     setNewNumber("");
@@ -46,7 +60,7 @@ function App() {
 
   useEffect(() => {
     // axios.get(baseUrl).then((response) => setPersons(response.data));
-    getNotes(setPersons);
+    getContacts(setPersons);
   }, []);
 
   return (
