@@ -12,8 +12,10 @@ export const getContacts = (fn) => {
 };
 
 export const removeContact = (id, name) => {
-  window.confirm(`Delete ${name} from phonebook?`) &&
-    axios.delete(`${baseUrl}/${id}`);
+  return (
+    window.confirm(`Delete ${name} from phonebook?`) &&
+    axios.delete(`${baseUrl}/${id}`)
+  );
 };
 
 export const updateContact = (id, newContact) =>

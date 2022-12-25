@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { removeContact } from "./ContactRequests";
 
-const Numbers = ({ persons, search }) => {
+const Numbers = ({ message, persons, search }) => {
   const [contacts, setContacts] = useState(persons);
-  // console.log(contacts);
 
   const handleRemove = (id, name, listId) => {
-    removeContact(id, name);
+    removeContact(id, name).catch((err) => {
+      message("Contact not found in the server", "error");
+    });
     persons.splice(listId, 1);
     setContacts([...persons]);
+    message(`${name} deleted successfully!`, "success");
   };
 
   useEffect(() => {

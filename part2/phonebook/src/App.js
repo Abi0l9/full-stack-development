@@ -4,12 +4,17 @@ import Numbers from "./Numbers";
 import PersonForm from "./PersonForm";
 import Phonebook from "./Phonebook";
 import { getContacts, createContact, updateContact } from "./ContactRequests";
+import Notification from "./Notification";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+  const [error, setError] = useState({
+    message: "",
+    type: "",
+  });
 
   const handleNewInput = (e) => {
     e.target.name === "name"
@@ -37,27 +42,45 @@ function App() {
       setPersons(persons.concat(newContact));
 
     // If field is empty
-    !handleEmptyInputs() && alert("You can't save an empty field");
+    !handleEmptyInputs() && message(`You can't save an empty field`, "error");
 
     //update when duplicate is true
     duplicate.length &&
       window.confirm(
         `${newName} is already added to phonebook, would you like to replace it?`
       ) &&
-      updateContact(duplicateId, newContact);
+      updateContact(duplicateId, newContact) &&
+      message("Contact updated, successfully!", "success");
     return duplicate.length;
   };
+
+  const duplicateAndEmptyInputs = () =>
+    handleDuplicate() < 1 && handleEmptyInputs();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleDuplicate();
 
-    handleDuplicate() < 1 &&
-      handleEmptyInputs() &&
-      createContact(newContact);
+    duplicateAndEmptyInputs() && createContact(newContact);
+
+    duplicateAndEmptyInputs() &&
+      message(`${newName} has been added to phonebook.`, "success");
 
     setNewName("");
     setNewNumber("");
+  };
+
+  const message = (msg, type) => {
+    setError({
+      message: msg,
+      type: type,
+    });
+    setTimeout(() => {
+      setError({
+        message: "",
+        type: "",
+      });
+    }, 5000);
   };
 
   const handleSearch = (e) => {
@@ -71,7 +94,10 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Phonebook search={search} handleSearch={handleSearch} />
+      <div>
+        <Phonebook search={search} handleSearch={handleSearch} />
+        <Notification message={error.message} type={error.type} />
+      </div>
 
       <br />
       <br />
@@ -82,7 +108,7 @@ function App() {
         newNumber={newNumber}
       />
 
-      <Numbers persons={persons} search={search} />
+      <Numbers message={message} persons={persons} search={search} />
     </div>
   );
 }
