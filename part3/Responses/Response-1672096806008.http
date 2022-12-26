@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: text/html; charset=utf-8
+Content-Length: 95
+ETag: W/"5f-ixsflUmDPa2fk9d/hXyyCodtJxY"
+Date: Mon, 26 Dec 2022 23:19:58 GMT
+Connection: close
+
+Phonebook has info for 4 people 
+ Tue Dec 27 2022 00:19:58 GMT+0100 (West Africa Standard Time)
