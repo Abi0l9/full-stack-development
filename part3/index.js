@@ -1,3 +1,4 @@
+const { request, response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -33,6 +34,15 @@ app.get("/api/info", (request, response) => {
   const date = new Date();
   const message = `Phonebook has info for ${phonebookLength} people`;
   response.send(`${message} \n${date}`);
+});
+
+app.get("/api/persons/:personId", (request, response) => {
+  const personId = request.params.personId * 1;
+  const person = persons.find((person) => person.id === personId);
+
+  (person && response.json(person)) ||
+    (response.status(404) &&
+      response.json({ message: `Contact with id ${personId} not found!` }));
 });
 
 app.listen(PORT, console.log("\n App running on port ", PORT));
