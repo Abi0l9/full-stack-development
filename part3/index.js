@@ -74,7 +74,6 @@ app.delete("/api/persons/:personId", (request, response) => {
 
   const person = persons.filter((person) => person.id !== personId);
   persons = person;
-  console.log(getId, persons);
 
   (getId && response.status(200).json(persons)) ||
     errMsgCode(response, personId);
