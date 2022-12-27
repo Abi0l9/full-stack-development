@@ -63,4 +63,16 @@ app.delete("/api/persons/:personId", (request, response) => {
     errMsgCode(response, personId);
 });
 
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  body.id = Math.floor(Math.random() * 25) + 1;
+  const confirmUnique = persons.filter((person) => person.id === body.id);
+
+  console.log(confirmUnique);
+
+  !confirmUnique.length
+    ? persons.push(body) && response.json(persons)
+    : response.status(422).json({ error: "id not unique!" });
+});
+
 app.listen(PORT, console.log("\n App running on port ", PORT));
