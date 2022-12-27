@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 const PORT = 3001;
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: "Khalifah",
@@ -27,9 +27,16 @@ const persons = [
   },
 ];
 
-app.get("/api/persons", (request, response) => response.json(persons));
+const errMsgCode = (response, id) => {
+  return (
+    response.status(404) &&
+    response.json({ message: `Contact with id ${id} not found!` })
+  );
+};
 
-app.get("/api/info", (request, response) => {
+app.get("/api/persons", (_request, response) => response.json(persons));
+
+app.get("/api/info", (_request, response) => {
   const phonebookLength = persons.length;
   const date = new Date();
   const message = `Phonebook has info for ${phonebookLength} people`;
@@ -40,9 +47,20 @@ app.get("/api/persons/:personId", (request, response) => {
   const personId = request.params.personId * 1;
   const person = persons.find((person) => person.id === personId);
 
-  (person && response.json(person)) ||
-    (response.status(404) &&
-      response.json({ message: `Contact with id ${personId} not found!` }));
+  (person && response.json(person)) || errMsgCode(response, personId);
+});
+
+app.delete("/api/persons/:personId", (request, response) => {
+  const personId = request.params.personId * 1;
+
+  const getId = persons.map((n) => n.id).includes(personId);
+
+  const person = persons.filter((person) => person.id !== personId);
+  persons = person;
+  console.log(getId, persons);
+
+  (getId && response.status(200).json(persons)) ||
+    errMsgCode(response, personId);
 });
 
 app.listen(PORT, console.log("\n App running on port ", PORT));
