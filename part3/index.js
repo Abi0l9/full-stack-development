@@ -30,7 +30,7 @@ let persons = [
 const errMsgCode = (response, id) => {
   return (
     response.status(404) &&
-    response.json({ message: `Contact with id ${id} not found!` })
+    response.json({ error: `Contact with id ${id} not found!` })
   );
 };
 
@@ -66,13 +66,19 @@ app.delete("/api/persons/:personId", (request, response) => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
   body.id = Math.floor(Math.random() * 25) + 1;
-  const confirmUnique = persons.filter((person) => person.id === body.id);
+  const confirmUniqueId = persons.filter((person) => person.id === body.id);
 
-  console.log(confirmUnique);
+  const confirmMissingUnique = persons.filter(
+    (person) => person.name === body.name
+  );
 
-  !confirmUnique.length
-    ? persons.push(body) && response.json(persons)
-    : response.status(422).json({ error: "id not unique!" });
+  confirmUniqueId.length > 0
+    ? response.status(422).json({ error: "id not unique!" })
+    : confirmMissingUnique.length > 0
+    ? response.status(422).json({ error: "name must be unique" })
+    : !body.name || !body.number
+    ? response.status(422).json({ error: "name/number is missing!" })
+    : persons.push(body) && response.json(persons);
 });
 
 app.listen(PORT, console.log("\n App running on port ", PORT));
