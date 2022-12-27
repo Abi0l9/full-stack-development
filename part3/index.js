@@ -2,12 +2,24 @@ const { request, response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
+
 const morgan = require("morgan");
 
-app.use(morgan("tiny"));
+const logger = (tokens, request, response) => {
+  return [
+    tokens.method(request, response),
+    tokens.url(request, response),
+    tokens.status(request, response),
+    tokens.res(request, response, "content-length"),
+    "-",
+    tokens["response-time"](request, response),
+    "ms",
+    JSON.stringify(request.body),
+    "\n ######## \n",
+  ].join(" ");
+};
 
-// morgan.token("host", (request, response) => request.hostname);
-const PORT = 3001;
+app.use(morgan(logger));
 
 let persons = [
   {
@@ -86,4 +98,5 @@ app.post("/api/persons", (request, response) => {
     : persons.push(body) && response.json(persons);
 });
 
+const PORT = 3001;
 app.listen(PORT, console.log("\n App running on port ", PORT));
