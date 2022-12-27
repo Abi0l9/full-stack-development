@@ -2,6 +2,11 @@ const { request, response } = require("express");
 const express = require("express");
 const app = express();
 app.use(express.json());
+const morgan = require("morgan");
+
+app.use(morgan("tiny"));
+
+// morgan.token("host", (request, response) => request.hostname);
 const PORT = 3001;
 
 let persons = [
