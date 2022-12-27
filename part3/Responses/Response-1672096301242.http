@@ -1,9 +1,0 @@
-HTTP/1.1 200 OK
-X-Powered-By: Express
-Content-Type: application/json; charset=utf-8
-Content-Length: 192
-ETag: W/"c0-ytmQIH7yzRnR/7TPiPe1cr1FnJA"
-Date: Mon, 26 Dec 2022 23:11:06 GMT
-Connection: close
-
-[{"id":1,"name":"Khalifah","number":"09065909090"},{"id":2,"name":"Kashy","number":"08090765432"},{"id":3,"name":"Wale","number":"09058786758"},{"id":4,"name":"Abiola","number":"08078685848"}]

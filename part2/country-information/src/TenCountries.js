@@ -25,7 +25,6 @@ const TenCountries = ({ ten, setInput }) => {
       lng: event.target.dataset.lng,
     });
   };
-  // console.log(coords);
 
   useEffect(() => {
     let result = makeTen.filter((country) => clicked === country.name);
