@@ -22,8 +22,8 @@ const Numbers = ({ message, persons, search }) => {
       <h2>Numbers</h2>
       {contacts
         .filter((person) =>
-          person.name.toLowerCase().includes(search.toLowerCase())
-        )
+          (person.name.toLowerCase().includes(search.toLowerCase()) || person.number.includes(search)
+        ))
         .map((person, id) => (
           <div key={person.name + " " + person.id}>
             {person.name} {person.number}{" "}
