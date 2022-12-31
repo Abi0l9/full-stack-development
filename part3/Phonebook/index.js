@@ -1,6 +1,7 @@
-const { request, response } = require("express");
+const Phonebook = require("./models/note");
 const express = require("express");
 const app = express();
+
 app.use(express.json());
 app.use(express.static("build"));
 
@@ -54,51 +55,56 @@ const errMsgCode = (response, id) => {
   );
 };
 
-app.get("/api/persons", (_request, response) => response.json(persons));
+const getAllContactsJSON = (response) =>
+  Phonebook.find({}).then((result) => response.json(result));
+
+const getAllContactsObj = (response) =>
+  Phonebook.find({}).then((result) => JSON.stringify(result));
+
+app.get("/api/persons", (_request, response) => getAllContactsJSON(response));
 
 app.get("/api/info", (_request, response) => {
-  const phonebookLength = persons.length;
-  const date = new Date();
-  const message = `Phonebook has info for ${phonebookLength} people`;
-  response.send(`${message} \n${date}`);
+  Phonebook.find({}).then((result) => {
+    const date = new Date();
+    const len = result.length;
+    const message = `Phonebook has info for ${len} people`;
+    response.send(`${message} \n${date}`);
+  });
 });
 
 app.get("/api/persons/:personId", (request, response) => {
   const personId = request.params.personId * 1;
-  const person = persons.find((person) => person.id === personId);
 
-  (person && response.json(person)) || errMsgCode(response, personId);
+  const person = Phonebook.findById(request.params.personId)
+    .then((result) => response.json(result))
+    .catch((error) => errMsgCode(response, request.params.personId));
 });
 
 app.delete("/api/persons/:personId", (request, response) => {
-  const personId = request.params.personId * 1;
+  const personId = request.params.personId;
 
-  const getId = persons.map((n) => n.id).includes(personId);
-
-  const person = persons.filter((person) => person.id !== personId);
-  persons = person;
-
-  (getId && response.status(200).json(persons)) ||
-    errMsgCode(response, personId);
+  Phonebook.findByIdAndDelete(personId)
+    .then((result) => response.json(result))
+    .catch((error) => errMsgCode(response, personId));
 });
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  body.id = Math.floor(Math.random() * 25) + 1;
-  const confirmUniqueId = persons.filter((person) => person.id === body.id);
 
-  const confirmMissingUnique = persons.filter(
-    (person) => person.name === body.name
-  );
+  const person = new Phonebook({
+    name: body.name,
+    number: body.number,
+  });
 
-  confirmUniqueId.length > 0
-    ? response.status(422).json({ error: "id not unique!" })
-    : confirmMissingUnique.length > 0
-    ? response.status(422).json({ error: "name must be unique" })
-    : !body.name || !body.number
-    ? response.status(422).json({ error: "name/number is missing!" })
-    : persons.push(body) && response.json(persons);
+  if (body.name === "") {
+    return response.status(400).json({ error: "content missing" });
+  }
+
+  person
+    .save()
+    .then((result) => response.json(result))
+    .catch((error) => console.log("Something happened..."));
 });
 
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log("\n App running on port ", PORT));
