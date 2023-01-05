@@ -92,7 +92,7 @@ app.get("/api/persons/:personId", (request, response, next) => {
 
   const person = Phonebook.findById(personId)
     .then((result) => {
-      if (note) response.json(result);
+      if (result) response.json(result);
       else response.status(404).end();
     })
     .catch((error) => next(error));
@@ -122,7 +122,7 @@ app.post("/api/persons", (request, response) => {
     number: body.number,
   });
 
-  if (body.name === "") {
+  if (body.name === "" || !body.number) {
     return response.status(400).json({ error: "content missing" });
   }
 
@@ -140,14 +140,9 @@ app.put("/api/persons/:personId", (request, response, next) => {
     name: body.name,
     number: body.number,
   };
-  console.log(body.name);
 
-  Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
-    .then((updatedPerson) => {
-      if (!body.name || !body.number) {
-        response.json({ message: "missing field" }).status(400).end();
-      } else response.json(updatedPerson);
-    })
+ (!body.name || !body.number) ? response.json({message: "missing field"}).status(400).end() : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
+    .then(updatedPerson => response.json(updatedPerson))
     .catch((error) => next(error));
 });
 
