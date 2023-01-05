@@ -29,7 +29,18 @@ function App() {
   };
 
   const handleEmptyInputs = () => newName && newNumber;
-
+  
+  const newUpdate = (updatedName, dupId) => {
+    
+    const confirm = window.confirm(
+        `${updatedName} is already added to phonebook, would you like to replace it?`
+      );
+      if(confirm){
+        updateContact(dupId, newContact);
+        message("Contact updated, successfully!", "success");
+        
+      }
+  };
   const handleDuplicate = () => {
     const duplicate = persons.filter(
       (person) => person.name === newName //&& person.number === newNumber
@@ -45,12 +56,8 @@ function App() {
     !handleEmptyInputs() && message(`You can't save an empty field`, "error");
 
     //update when duplicate is true
-    duplicate.length &&
-      window.confirm(
-        `${newName} is already added to phonebook, would you like to replace it?`
-      ) &&
-      updateContact(duplicateId, newContact) &&
-      message("Contact updated, successfully!", "success");
+    duplicate.length  &&
+      newUpdate(newName,duplicateId);
     return duplicate.length;
   };
 
