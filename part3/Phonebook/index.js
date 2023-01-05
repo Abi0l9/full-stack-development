@@ -9,6 +9,20 @@ const cors = require("cors");
 app.use(cors());
 const morgan = require("morgan");
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error) {
+    return response.status(400).send({ error: error.name });
+  }
+
+  next(error);
+};
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
 const logger = (tokens, request, response) => {
   return [
     tokens.method(request, response),
@@ -24,6 +38,7 @@ const logger = (tokens, request, response) => {
 };
 
 app.use(morgan(logger));
+app.use(errorHandler);
 
 let persons = [
   {
@@ -72,20 +87,31 @@ app.get("/api/info", (_request, response) => {
   });
 });
 
-app.get("/api/persons/:personId", (request, response) => {
-  const personId = request.params.personId * 1;
-
-  const person = Phonebook.findById(request.params.personId)
-    .then((result) => response.json(result))
-    .catch((error) => errMsgCode(response, request.params.personId));
-});
-
-app.delete("/api/persons/:personId", (request, response) => {
+app.get("/api/persons/:personId", (request, response, next) => {
   const personId = request.params.personId;
 
-  Phonebook.findByIdAndDelete(personId)
-    .then((result) => response.json(result))
-    .catch((error) => errMsgCode(response, personId));
+  const person = Phonebook.findById(personId)
+    .then((result) => {
+      if (note) response.json(result);
+      else response.status(404).end();
+    })
+    .catch((error) => next(error));
+  // .catch((error) => errMsgCode(response, personId));
+});
+
+app.delete("/api/persons/:personId", (request, response, next) => {
+  const personId = request.params.personId;
+
+  Phonebook.findByIdAndRemove(personId)
+    .then((result) => {
+      if (result) {
+        response.json({ message: "deleted successfully" }).status(204).end();
+      } else {
+        response.json({ message: "content not found" }).status(404).end();
+      }
+    })
+    .catch((error) => next(error));
+  // .catch((error) => errMsgCode(response, personId));
 });
 
 app.post("/api/persons", (request, response) => {
@@ -106,5 +132,25 @@ app.post("/api/persons", (request, response) => {
     .catch((error) => console.log("Something happened..."));
 });
 
+app.put("/api/persons/:personId", (request, response, next) => {
+  const personId = request.params.personId;
+  const body = request.body;
+
+  const newPerson = {
+    name: body.name,
+    number: body.number,
+  };
+  console.log(body.name);
+
+  Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
+    .then((updatedPerson) => {
+      if (!body.name || !body.number) {
+        response.json({ message: "missing field" }).status(400).end();
+      } else response.json(updatedPerson);
+    })
+    .catch((error) => next(error));
+});
+
+app.use(unknownEndpoint);
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log("\n App running on port ", PORT));
