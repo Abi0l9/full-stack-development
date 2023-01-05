@@ -141,9 +141,11 @@ app.put("/api/persons/:personId", (request, response, next) => {
     number: body.number,
   };
 
- (!body.name || !body.number) ? response.json({message: "missing field"}).status(400).end() : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
-    .then(updatedPerson => response.json(updatedPerson))
-    .catch((error) => next(error));
+  !body.name || !body.number
+    ? response.json({ message: "missing field" }).status(400).end()
+    : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
+        .then((updatedPerson) => response.json(updatedPerson))
+        .catch((error) => next(error));
 });
 
 app.use(unknownEndpoint);
