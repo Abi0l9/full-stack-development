@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const baseUrl = "/api/persons";
+const baseUrl = "http://localhost:3001/api/persons";
 
 export const createContact = (newObject) => {
-  axios.post(baseUrl, newObject);
+  return axios.post(baseUrl, newObject);
 };
 
 export const getContacts = (fn) => {

@@ -29,17 +29,15 @@ function App() {
   };
 
   const handleEmptyInputs = () => newName && newNumber;
-  
+
   const newUpdate = (updatedName, dupId) => {
-    
     const confirm = window.confirm(
-        `${updatedName} is already added to phonebook, would you like to replace it?`
-      );
-      if(confirm){
-        updateContact(dupId, newContact);
-        message("Contact updated, successfully!", "success");
-        
-      }
+      `${updatedName} is already added to phonebook, would you like to replace it?`
+    );
+    if (confirm) {
+      updateContact(dupId, newContact);
+      message("Contact updated, successfully!", "success");
+    }
   };
   const handleDuplicate = () => {
     const duplicate = persons.filter(
@@ -50,14 +48,14 @@ function App() {
     // Add new contact if fields arent empty and duplicate is none
     handleEmptyInputs() &&
       duplicate.length < 1 &&
+      newName.length > 2 &&
       setPersons(persons.concat(newContact));
 
     // If field is empty
     !handleEmptyInputs() && message(`You can't save an empty field`, "error");
 
     //update when duplicate is true
-    duplicate.length  &&
-      newUpdate(newName,duplicateId);
+    duplicateId && newUpdate(newName, duplicateId);
     return duplicate.length;
   };
 
@@ -68,10 +66,21 @@ function App() {
     e.preventDefault();
     handleDuplicate();
 
-    duplicateAndEmptyInputs() && createContact(newContact);
-
     duplicateAndEmptyInputs() &&
-      message(`${newName} has been added to phonebook.`, "success");
+      createContact(newContact)
+        .then((result) =>
+          message(`${newName} has been added to phonebook.`, "success")
+        )
+        .catch((error) => {
+          const errMsgs = error.response.data
+            .split("\n")[7]
+            .split(".")[0]
+            .split(":");
+
+          errMsgs.splice(0, 1);
+          console.log(errMsgs);
+          message(errMsgs.join(" "), "error");
+        });
 
     setNewName("");
     setNewNumber("");

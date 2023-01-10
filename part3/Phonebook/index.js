@@ -1,4 +1,4 @@
-const Phonebook = require("./models/note");
+const Phonebook = require("./models/phonebook");
 const express = require("express");
 const app = express();
 
