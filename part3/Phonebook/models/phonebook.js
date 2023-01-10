@@ -19,11 +19,12 @@ const phonebookSchema = new mongoose.Schema({
     required: true,
   },
   number: {
-    type: Number,
-    // max: 11,
+    type: String,
+    minlength: 8,
+    maxlength: 12,
     validate: {
       validator: function (v) {
-        return /^\d{2}?-\d{7} /.test(v);
+        return /^(\d{2}||\d{3})-(\d{7}||\d{8})$/.test(v);
       },
       message: (props) => `${props.value} is not a valid phone number!`,
     },
