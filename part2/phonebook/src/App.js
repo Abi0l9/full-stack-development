@@ -39,18 +39,17 @@ function App() {
       message("Contact updated, successfully!", "success");
     }
   };
+  let dup;
   const handleDuplicate = () => {
     const duplicate = persons.filter(
       (person) => person.name === newName //&& person.number === newNumber
     );
+    dup = duplicate;
     const duplicateId = duplicate[0]?.id;
 
     // Add new contact if fields arent empty and duplicate is none
-    handleEmptyInputs() &&
-      duplicate.length < 1 &&
-      newName.length > 2 &&
-      setPersons(persons.concat(newContact));
-
+    handleEmptyInputs();
+      
     // If field is empty
     !handleEmptyInputs() && message(`You can't save an empty field`, "error");
 
@@ -68,8 +67,13 @@ function App() {
 
     duplicateAndEmptyInputs() &&
       createContact(newContact)
-        .then((result) =>
-          message(`${newName} has been added to phonebook.`, "success")
+        .then((result) => {
+          message(`${newName} has been added to phonebook.`, "success");
+          dup.length < 1 &&
+          setPersons(persons.concat(newContact));
+
+          
+        }
         )
         .catch((error) => {
           const errMsgs = error.response.data
@@ -78,7 +82,7 @@ function App() {
             .split(":");
 
           errMsgs.splice(0, 1);
-          console.log(errMsgs);
+          //console.log(errMsgs);
           message(errMsgs.join(" "), "error");
         });
 
