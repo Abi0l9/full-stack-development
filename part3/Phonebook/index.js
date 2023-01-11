@@ -42,41 +42,41 @@ const logger = (tokens, request, response) => {
 app.use(morgan(logger));
 app.use(errorHandler);
 
-let persons = [
-  {
-    id: 1,
-    name: "Khalifah",
-    number: "09065909090",
-  },
-  {
-    id: 2,
-    name: "Kashy",
-    number: "08090765432",
-  },
-  {
-    id: 3,
-    name: "Wale",
-    number: "09058786758",
-  },
-  {
-    id: 4,
-    name: "Abiola",
-    number: "08078685848",
-  },
-];
+// let persons = [
+//   {
+//     id: 1,
+//     name: "Khalifah",
+//     number: "09065909090",
+//   },
+//   {
+//     id: 2,
+//     name: "Kashy",
+//     number: "08090765432",
+//   },
+//   {
+//     id: 3,
+//     name: "Wale",
+//     number: "09058786758",
+//   },
+//   {
+//     id: 4,
+//     name: "Abiola",
+//     number: "08078685848",
+//   },
+// ];
 
-const errMsgCode = (response, id) => {
-  return (
-    response.status(404) &&
-    response.json({ error: `Contact with id ${id} not found!` })
-  );
-};
+// const errMsgCode = (response, id) => {
+//   return (
+//     response.status(404) &&
+//     response.json({ error: `Contact with id ${id} not found!` })
+//   );
+// };
 
 const getAllContactsJSON = (response) =>
   Phonebook.find({}).then((result) => response.json(result));
 
-const getAllContactsObj = (response) =>
-  Phonebook.find({}).then((result) => JSON.stringify(result));
+// const getAllContactsObj = (response) =>
+//   Phonebook.find({}).then((result) => JSON.stringify(result));
 
 app.get("/api/persons", (_request, response) => getAllContactsJSON(response));
 
@@ -92,7 +92,7 @@ app.get("/api/info", (_request, response) => {
 app.get("/api/persons/:personId", (request, response, next) => {
   const personId = request.params.personId;
 
-  const person = Phonebook.findById(personId)
+  Phonebook.findById(personId)
     .then((result) => {
       if (result) response.json(result);
       else response.status(404).end();
@@ -146,13 +146,15 @@ app.put("/api/persons/:personId", (request, response, next) => {
     const pattern = /^(\d{2}||\d{3})-(\d{7}||\d{8})$/;
     return pattern.test(body.number);
   };
-      
 
   !body.name || !body.number
     ? response.json({ message: "missing field" }).status(400).end()
-    : !matchReg() ? 
-    response.json({ message: "Phone number format is invalid"}).status(400).end()
-    : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
+    : !matchReg()
+      ? response
+        .json({ message: "Phone number format is invalid" })
+        .status(400)
+        .end()
+      : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
         .then((updatedPerson) => response.json(updatedPerson))
         .catch((error) => next(error));
 });
