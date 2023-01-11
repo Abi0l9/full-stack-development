@@ -142,9 +142,16 @@ app.put("/api/persons/:personId", (request, response, next) => {
     name: body.name,
     number: body.number,
   };
+  const matchReg = () => {
+    const pattern = /^(\d{2}||\d{3})-(\d{7}||\d{8})$/;
+    return pattern.test(body.number);
+  };
+      
 
   !body.name || !body.number
     ? response.json({ message: "missing field" }).status(400).end()
+    : !matchReg() ? 
+    response.json({ message: "Phone number format is invalid"}).status(400).end()
     : Phonebook.findByIdAndUpdate(personId, newPerson, { new: true })
         .then((updatedPerson) => response.json(updatedPerson))
         .catch((error) => next(error));
