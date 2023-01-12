@@ -1,0 +1,32 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "An online blog for people to post about their favourite blogs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Abi0l9/full-stack-development.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "Abi0l9",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abi0l9/full-stack-development/issues"
+  },
+  "homepage": "https://github.com/Abi0l9/full-stack-development#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.3"
+  }
+}

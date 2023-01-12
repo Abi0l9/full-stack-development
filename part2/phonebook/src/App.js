@@ -30,11 +30,18 @@ function App() {
 
   const handleEmptyInputs = () => newName && newNumber;
 
+  const matchReg = () => {
+    const pattern = /^(\d{2}||\d{3})-(\d{7}||\d{8})$/;
+    !pattern.test(newNumber) && message(`${newNumber} doesn't match the format
+          "12-1234567" or "123-12345678"`, "error");
+    return pattern.test(newNumber);
+  };
+    
   const newUpdate = (updatedName, dupId) => {
     const confirm = window.confirm(
       `${updatedName} is already added to phonebook, would you like to replace it?`
     );
-    if (confirm) {
+    if (confirm && matchReg()) {
       updateContact(dupId, newContact);
       message("Contact updated, successfully!", "success");
     }
@@ -57,6 +64,8 @@ function App() {
     duplicateId && newUpdate(newName, duplicateId);
     return duplicate.length;
   };
+  
+  
 
   const duplicateAndEmptyInputs = () =>
     handleDuplicate() < 1 && handleEmptyInputs();
@@ -71,19 +80,23 @@ function App() {
           message(`${newName} has been added to phonebook.`, "success");
           dup.length < 1 &&
           setPersons(persons.concat(newContact));
-
           
-        }
-        )
+        })
         .catch((error) => {
+          //const numCheck = matchReg()
           const errMsgs = error.response.data
             .split("\n")[7]
             .split(".")[0]
             .split(":");
 
           errMsgs.splice(0, 1);
-          //console.log(errMsgs);
-          message(errMsgs.join(" "), "error");
+          
+          newName.length < 3 && message(`${newName} is less than the minimum
+          input (3)`, "error")
+          
+          matchReg();
+          
+          //message(errMsgs.join(" "), "error");
         });
 
     setNewName("");
