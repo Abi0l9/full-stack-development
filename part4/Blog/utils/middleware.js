@@ -1,9 +1,11 @@
+const { info } = require("./logger");
+
 const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method);
-  console.log("Path:  ", request.path);
-  console.log("Body:  ", request.body);
-  console.log("Status:  ", response.status);
-  console.log("---");
+  info("Method:", request.method);
+  info("Path:  ", request.path);
+  info("Body:  ", request.body);
+  info("Status:  ", response.statusCode);
+  info("---");
   next();
 };
 
