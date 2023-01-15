@@ -35,4 +35,22 @@ const mostBlogs = (blogss) => {
   return result;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogss) => {
+  const query = blogss.map((blog) => {
+    return { author: blog.author, likes: blog.likes };
+  });
+  const result = query.sort((a, b) => a.likes - b.likes).at(-1);
+  let count = 0;
+
+  for (let i = 0; i < query.length; i++) {
+    let currBlog = query[i];
+    if (currBlog.author === result.author) {
+      count += currBlog.likes;
+    }
+  }
+  result.likes = count;
+
+  return result;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
