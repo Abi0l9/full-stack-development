@@ -17,4 +17,22 @@ const favoriteBlog = (blogs) => {
   return blogs.filter((blog) => blog.likes === max)[0].likes;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogss) => {
+  const info = blogss
+    .map((blog) => blog.author)
+    .reduce((obj, item) => {
+      obj[item] = obj[item] ? (obj[item] += 1) : 1;
+      return obj;
+    }, {});
+
+  const max = Object.values(info)
+    .sort((a, b) => a - b)
+    .at(-1);
+
+  const author = Object.keys(info).at(max - 1);
+  const result = { author: author, blogs: max };
+
+  return result;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
