@@ -1,4 +1,3 @@
-jest.useFakeTimers();
 const supertest = require("supertest");
 const mongoose = require("mongoose");
 const helper = require("./test_helper");
@@ -10,15 +9,13 @@ describe("when there are initially saved blogs", () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(helper.initialBlogs);
-  });
+  }, 10000);
 
-  test("get status", () => {
-    const response = api.get("/info").expect(200);
-  });
+  test("get status", async () => await api.get("/info").expect(200));
 
-  test("get blog list", () => {
-    const response = api
-      .get("api/blogs")
+  test("get blog list", async () => {
+    const response = await api
+      .get("/api/blogs")
       .expect(200)
       .expect("Content-Type", /application\/json/);
     expect(response.body).toHaveLength(4);
