@@ -1,0 +1,55 @@
+Error when beforeEach is called with async/await
+---
+> blog@1.0.0 test
+> cross-env NODE_ENV=test jest --verbose --runInBand --forceExit -t initially
+
+(node:16056) [MONGOOSE] Warning: Mongoose: looks like you're trying to test 
+a Mongoose app with Jest's mock timers enabled. Please make sure you read Mongoose's docs on configuring Jest to test Node.js apps: https://mongoosejs.com/docs/jest.html
+(Use `node --trace-warnings ...` to show where the warning was created)     
+ FAIL  tests/blog_api.test.js (14.758 
+s)
+  when there are initially saved blogs
+    × get status (5015 ms)
+    × get blog list (5040 ms)
+
+  ● when there are initially saved blogs › get status
+
+    thrown: "Exceeded timeout of 5000 
+ms for a hook.
+    Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test."
+
+       8 |
+       9 | describe("when there are initially saved blogs", () => {
+    > 10 |   beforeEach(async () => { 
+         |   ^
+      11 |     await Blog.deleteMany({});
+      12 |     await Blog.insertMany(helper.initialBlogs);
+      13 |   });
+
+      at beforeEach (tests/blog_api.test.js:10:3)
+      at Object.describe (tests/blog_api.test.js:9:1)
+
+  ● when there are initially saved blogs › get blog list
+
+    thrown: "Exceeded timeout of 5000 
+ms for a hook.
+    Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test."
+
+       8 |
+       9 | describe("when there are initially saved blogs", () => {
+    > 10 |   beforeEach(async () => { 
+         |   ^
+      11 |     await Blog.deleteMany({});
+      12 |     await Blog.insertMany(helper.initialBlogs);
+      13 |   });
+
+      at beforeEach (tests/blog_api.test.js:10:3)
+      at Object.describe (tests/blog_api.test.js:9:1)
+
+Test Suites: 1 failed, 8 skipped, 1 of 9 total
+Tests:       2 failed, 12 skipped, 14 
+total
+Snapshots:   0 total
+Time:        19.907 s, estimated 43 s 
+Ran all test suites with tests matching "initially".
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
