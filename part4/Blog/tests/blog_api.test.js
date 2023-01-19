@@ -20,6 +20,13 @@ describe("when there are initially saved blogs", () => {
       .expect("Content-Type", /application\/json/);
     expect(response.body).toHaveLength(4);
   });
+
+  test("test for id", async () => {
+    const response = await api.get("/api/blogs");
+
+    const result = await response.body[0].id;
+    expect(result).toBeDefined();
+  });
 });
 
 afterAll(() => {
