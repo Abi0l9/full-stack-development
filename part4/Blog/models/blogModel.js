@@ -4,8 +4,16 @@ const blogSchema = mongoose.Schema({
   title: String,
   author: String,
   url: String,
-  likes: Number,
+  likes: {
+    type: String,
+    validate: isLikesField,
+    message: "input is invalid",
+  },
 });
+
+function isLikesField() {
+  return this.likes && true;
+}
 
 blogSchema.set("toJSON", {
   transform: (document, returnedObject) => {

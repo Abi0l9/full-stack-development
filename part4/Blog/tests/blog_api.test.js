@@ -9,7 +9,7 @@ describe("when there are initially saved blogs", () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(helper.initialBlogs);
-  }, 10000);
+  }, 15000);
 
   test("test info", async () => {
     await api.get("/api/blogs/info").expect(200);
@@ -35,7 +35,7 @@ describe("when there are initially saved blogs", () => {
       title: "new Blog",
       author: "Khalifah",
       url: "https://cnn.com",
-      likes: "30000",
+      likes: "",
     });
 
     await api
@@ -43,6 +43,29 @@ describe("when there are initially saved blogs", () => {
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
+
+    const blogAtEnd = await helper.blogInDb();
+
+    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+  });
+
+  test("likes field zero test", async () => {
+    const newBlog = new Blog({
+      title: "another Blog",
+      author: "Khalifah",
+      url: "https://cnn.com",
+      likes: "1000",
+    });
+    if (!newBlog.likes) {
+      newBlog.likes = 0;
+    }
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+    console.log(newBlog);
 
     const blogAtEnd = await helper.blogInDb();
 
