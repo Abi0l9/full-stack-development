@@ -13,6 +13,7 @@ blogRouter.post("", async (request, response) => {
   const blog = new Blog(request.body);
 
   const result = await blog.save();
+  // console.log(response)
   return response.status(201).json(result);
 });
 

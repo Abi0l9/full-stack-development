@@ -3,17 +3,15 @@ const mongoose = require("mongoose");
 const blogSchema = mongoose.Schema({
   title: String,
   author: String,
-  url: String,
+  url: {
+    type: String,
+    minLength: 3,
+  },
   likes: {
     type: String,
-    validate: isLikesField,
-    message: "input is invalid",
+    minLength: 1,
   },
 });
-
-function isLikesField() {
-  return this.likes && true;
-}
 
 blogSchema.set("toJSON", {
   transform: (document, returnedObject) => {

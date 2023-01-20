@@ -32,10 +32,10 @@ describe("when there are initially saved blogs", () => {
 
   test("add new blog", async () => {
     const newBlog = new Blog({
-      title: "new Blog",
+      title: "xi Blog",
       author: "Khalifah",
-      url: "https://cnn.com",
-      likes: "",
+      url: "www.f.com",
+      likes: "200",
     });
 
     await api
@@ -54,7 +54,7 @@ describe("when there are initially saved blogs", () => {
       title: "another Blog",
       author: "Khalifah",
       url: "https://cnn.com",
-      likes: "9000",
+      likes: "",
     });
     if (!newBlog.likes) {
       newBlog.likes = 0;
@@ -65,6 +65,8 @@ describe("when there are initially saved blogs", () => {
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
+
+    expect(newBlog.likes.length).toBeGreaterThanOrEqual(1);
 
     const blogAtEnd = await helper.blogInDb();
 
