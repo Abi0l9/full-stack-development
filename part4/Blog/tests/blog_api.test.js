@@ -11,8 +11,6 @@ describe("when there are initially saved blogs", () => {
     await Blog.insertMany(helper.initialBlogs);
   }, 10000);
 
-  test("get status", async () => await api.get("/info").expect(200));
-
   test("get blog list", async () => {
     const response = await api
       .get("/api/blogs")
@@ -26,6 +24,29 @@ describe("when there are initially saved blogs", () => {
 
     const result = await response.body[0].id;
     expect(result).toBeDefined();
+  });
+
+  test("add new blog", async () => {
+    const newBlog = new Blog({
+      title: "new Blog",
+      author: "Khalifah",
+      url: "https://cnn.com",
+      likes: "30000",
+    });
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const blogAtEnd = await helper.blogInDb();
+
+    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+  });
+
+  test("test info", async () => {
+    await api.get("/api/blogs/info").expect(200);
   });
 });
 

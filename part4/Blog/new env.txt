@@ -1,7 +1,0 @@
-PORT = 3003
-PASSWORD = personal
-MONGODB_URI=mongodb+srv://Abiola:personal@cluster0.qv2xexc.mongodb.net/blog?retryWrites=true&w=majority
-
-# TEST_MONGODB_URI=mongodb+srv://Abiola:personal@cluster0.o1opl.mongodb.net/testBlogApp?retryWrites=true&w=majority
-
-TEST_MONGODB_URI=mongodb+srv://Abiola:personal@cluster0.ujhx0ia.mongodb.net/blogTest?retryWrites=true&w=majority
