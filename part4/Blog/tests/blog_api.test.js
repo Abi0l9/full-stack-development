@@ -54,7 +54,7 @@ describe("when there are initially saved blogs", () => {
       title: "another Blog",
       author: "Khalifah",
       url: "https://cnn.com",
-      likes: "1000",
+      likes: "9000",
     });
     if (!newBlog.likes) {
       newBlog.likes = 0;
@@ -65,7 +65,6 @@ describe("when there are initially saved blogs", () => {
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
-    console.log(newBlog);
 
     const blogAtEnd = await helper.blogInDb();
 
