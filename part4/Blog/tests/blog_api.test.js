@@ -11,6 +11,10 @@ describe("when there are initially saved blogs", () => {
     await Blog.insertMany(helper.initialBlogs);
   }, 10000);
 
+  test("test info", async () => {
+    await api.get("/api/blogs/info").expect(200);
+  });
+
   test("get blog list", async () => {
     const response = await api
       .get("/api/blogs")
@@ -43,10 +47,6 @@ describe("when there are initially saved blogs", () => {
     const blogAtEnd = await helper.blogInDb();
 
     expect(blogAtEnd).toHaveLength(helper.initialBlogs.length + 1);
-  });
-
-  test("test info", async () => {
-    await api.get("/api/blogs/info").expect(200);
   });
 });
 
