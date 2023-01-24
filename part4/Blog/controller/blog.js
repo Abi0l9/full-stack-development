@@ -12,8 +12,14 @@ blogRouter.get("", async (request, response) => {
 blogRouter.post("", async (request, response) => {
   const blog = new Blog(request.body);
 
+  if (blog.title === undefined || blog.url === undefined) {
+    return response
+      .status(400)
+      .json({ message: "title/url field is required" })
+      .end();
+  }
+
   const result = await blog.save();
-  // console.log(response)
   return response.status(201).json(result);
 });
 

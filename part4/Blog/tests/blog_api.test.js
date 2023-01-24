@@ -31,12 +31,12 @@ describe("when there are initially saved blogs", () => {
   });
 
   test("add new blog", async () => {
-    const newBlog = new Blog({
+    const newBlog = {
       title: "xi Blog",
       author: "Khalifah",
-      url: "www.f.com",
+      url: "ffffffff",
       likes: "200",
-    });
+    };
 
     await api
       .post("/api/blogs")
@@ -50,13 +50,13 @@ describe("when there are initially saved blogs", () => {
   });
 
   test("likes field zero test", async () => {
-    const newBlog = new Blog({
+    const newBlog = {
       title: "another Blog",
       author: "Khalifah",
       url: "https://cnn.com",
       likes: "",
-    });
-    if (!newBlog.likes) {
+    };
+    if (newBlog.likes === "") {
       newBlog.likes = 0;
     }
 
@@ -66,11 +66,29 @@ describe("when there are initially saved blogs", () => {
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
-    expect(newBlog.likes.length).toBeGreaterThanOrEqual(1);
+    expect(+newBlog.likes).toBeGreaterThanOrEqual(0);
 
     const blogAtEnd = await helper.blogInDb();
 
     expect(blogAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+  });
+
+  test("url and title fields", async () => {
+    const newBlog = {
+      title: "xiv Blog",
+      author: "Khalifah",
+      likes: "2",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const blogAtEnd = await helper.blogInDb();
+
+    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length);
   });
 });
 
