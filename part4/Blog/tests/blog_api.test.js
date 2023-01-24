@@ -31,7 +31,7 @@ describe("when there are initially saved blogs", () => {
   });
 });
 
-describe("when adding new blogs", () => {
+describe("addition of new blogs", () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(helper.initialBlogs);
@@ -96,6 +96,23 @@ describe("when adding new blogs", () => {
     const blogAtEnd = await helper.blogInDb();
 
     expect(blogAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe("when deleting a blog", () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    await Blog.insertMany(helper.initialBlogs);
+  }, 15000);
+
+  test("delete a blog", async () => {
+    const blogs = await helper.blogInDb();
+    const blogToDelete = blogs[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(200);
+
+    const blogAtEnd = await helper.blogInDb();
+    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length - 1);
   });
 });
 
