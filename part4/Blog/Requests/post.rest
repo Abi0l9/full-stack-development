@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "vlog",
+    "author": "Khalifah",
+    "url": "https://cnn.com",
+    "likes": "300470"
+}
