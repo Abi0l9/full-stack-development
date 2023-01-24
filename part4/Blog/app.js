@@ -6,6 +6,7 @@ const middleware = require("./utils/middleware");
 const cors = require("cors");
 const Blog = require("./models/blogModel");
 const blogRouter = require("./controller/blog");
+const userRouter = require("./controller/user");
 const { info, errors } = require("./utils/logger");
 
 const mongoose = require("mongoose");
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+app.use("/api/users", userRouter);
 app.use("/api/blogs", blogRouter);
 
 app.use(middleware.errorHandler);
