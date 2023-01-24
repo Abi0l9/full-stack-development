@@ -35,6 +35,18 @@ blogRouter.post("", async (request, response) => {
   return response.status(201).json(result);
 });
 
+blogRouter.patch("/:blogId", async (request, response) => {
+  const blogId = request.params.blogId;
+  const body = request.body;
+
+  const blog = await Blog.findByIdAndUpdate(blogId, { likes: body.likes });
+  if (blog) {
+    response.json({ message: "successful" }).end();
+  } else {
+    return response.json({ message: "blog not found" }).status(404).end();
+  }
+});
+
 blogRouter.delete("/:blogId", async (request, response) => {
   const blogId = request.params.blogId;
 
