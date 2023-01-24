@@ -29,6 +29,13 @@ describe("when there are initially saved blogs", () => {
     const result = await response.body[0].id;
     expect(result).toBeDefined();
   });
+});
+
+describe("when adding new blogs", () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    await Blog.insertMany(helper.initialBlogs);
+  }, 15000);
 
   test("add new blog", async () => {
     const newBlog = {
