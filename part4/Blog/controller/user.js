@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
-const { request } = require("../app");
 const userRouter = require("express").Router();
+const { request } = require("../app");
 const User = require("../models/user");
 
-userRouter.post("/", async (request, response) => {
+userRouter.post("", async (request, response) => {
   const { username, name, password } = request.body;
 
   const saltRounds = 10;
