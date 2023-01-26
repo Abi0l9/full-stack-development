@@ -20,7 +20,7 @@ describe("when there is initially one user at db", () => {
     const usersAtStart = await helper.usersInDb();
 
     const newUser = {
-      username: "root",
+      username: "roota",
       name: "admin",
       password: "opensecret",
     };
@@ -59,6 +59,28 @@ describe("when there is initially one user at db", () => {
     const usersAtEnd = await helper.usersInDb();
     console.log(usersAtEnd);
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  test("creation fails with short password", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "rooty",
+      name: "admin",
+      password: "op",
+    };
+
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+
+    const usernames = usersAtEnd.map((u) => u.username);
+    expect(usernames).not.toContain(newUser.username);
   });
 });
 

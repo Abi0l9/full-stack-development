@@ -6,6 +6,9 @@ const User = require("../models/user");
 userRouter.post("", async (request, response) => {
   const { username, name, password } = request.body;
 
+  if (password.length < 3) {
+    return response.status(400).json("password is too short").end();
+  }
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
