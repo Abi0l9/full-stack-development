@@ -20,8 +20,8 @@ describe("when there is initially one user at db", () => {
     const usersAtStart = await helper.usersInDb();
 
     const newUser = {
-      username: "admin",
-      name: "root",
+      username: "root",
+      name: "admin",
       password: "opensecret",
     };
 
@@ -40,10 +40,11 @@ describe("when there is initially one user at db", () => {
 
   test("creation fails with proper statuscode and message if username already taken", async () => {
     const usersAtStart = await helper.usersInDb();
+    console.log(usersAtStart);
 
     const newUser = {
-      username: "admin",
-      name: "root",
+      username: "root",
+      name: "admin",
       password: "opensecret",
     };
 
@@ -56,6 +57,7 @@ describe("when there is initially one user at db", () => {
     expect(result.body.error).toContain("expected `username` to be unique");
 
     const usersAtEnd = await helper.usersInDb();
+    console.log(usersAtEnd);
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
 });
