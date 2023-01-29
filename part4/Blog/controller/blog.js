@@ -2,20 +2,9 @@ const blogRouter = require("express").Router();
 const jwt = require("jsonwebtoken");
 const Blog = require("../models/blogModel");
 const User = require("../models/user");
-require("../utils/middleware");
-
-//get jwt token
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "");
-  }
-  return null;
-};
 
 blogRouter.get("/info", (req, res) => res.send("Welcome!"));
 blogRouter.get("", async (request, response) => {
-  console.log(request);
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
   const result = await User.findById(decodedToken.id).populate("blogs", {
