@@ -7,11 +7,12 @@ blogRouter.get("/info", (req, res) => res.send("Welcome!"));
 blogRouter.get("", async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-  const result = await User.findById(decodedToken.id).populate("blogs", {
-    title: 1,
-    url: 1,
-    likes: 1,
-  });
+  const result = await Blog.find({}).populate("user", { username: 1, name: 1 });
+  // const result = await User.findById(decodedToken.id); //.populate("blogs", {
+  //   title: 1,
+  //   url: 1,
+  //   likes: 1,
+  // });
 
   return response.json(result);
 });
@@ -30,7 +31,7 @@ blogRouter.get("/:blogId", async (request, response) => {
 blogRouter.post("", async (request, response) => {
   const body = request.body;
 
-  const decodedToken = jwt.verify("getTokenFrom(request)", process.env.SECRET);
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
   if (!decodedToken.id) {
     return response.status(401).json({ error: "token invalid" });
   }
@@ -51,8 +52,6 @@ blogRouter.post("", async (request, response) => {
       .json({ message: "title/url field is required" })
       .end();
   }
-
-  console.log(user);
 
   const result = await blog.save();
 
@@ -77,11 +76,24 @@ blogRouter.patch("/:blogId", async (request, response) => {
 blogRouter.delete("/:blogId", async (request, response) => {
   const blogId = request.params.blogId;
 
-  const blog = await Blog.findByIdAndRemove(blogId);
-  if (blog) {
-    response.json({ message: "successful" }).end();
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token invalid" });
+  }
+
+  const blogToDelete = await Blog.findById(blogId);
+  if (!blogToDelete) {
+    return response.status(404).json({ message: "blog not found" }).end();
+  }
+
+  if (blogToDelete.user.toString() === decodedToken.id) {
+    await Blog.findByIdAndRemove(blogId);
+    return response.json({ message: "Blog deleted successfully" }).end();
   } else {
-    return response.json({ message: "blog not found" }).status(404).end();
+    return response
+      .status(403)
+      .json({ message: "You have no permission to delete this blog." })
+      .end();
   }
 });
 
