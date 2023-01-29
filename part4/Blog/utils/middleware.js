@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const { info } = require("./logger");
 
 const requestLogger = (request, response, next) => {
@@ -31,4 +32,11 @@ const tokenExtractor = (request, response, next) => {
   next();
 };
 
-module.exports = { requestLogger, errorHandler, tokenExtractor };
+const userExtractor = (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  request.user = decodedToken.id;
+
+  next();
+};
+
+module.exports = { requestLogger, errorHandler, tokenExtractor, userExtractor };

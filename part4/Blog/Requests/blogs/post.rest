@@ -1,15 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjIiLCJpZCI6IjYzZDI3NTM5ZmI3MDI1MTRmNjYwMmY0ZiIsImlhdCI6MTY3NTAxMjk3NCwiZXhwIjoxNjc1MDE2NTc0fQ.sLRGi0VGrcs1jlDo8_RnGyeEsacpaBzaHxGvg7pzwIg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjMiLCJpZCI6IjYzZDI3NmQ5OTMxOTYyNzAyNjk0OGM0MSIsImlhdCI6MTY3NTAzMTc5OSwiZXhwIjoxNjc1MDM1Mzk5fQ.-UF6ld0iYKDzYJlhsAzxFEYmkDUyBgORbsNnx1wSpX4
 
 {
-    "title": "after jwt",
-    "author": "dev2",
+    "title": "after user middleware",
+    "author": "dev3",
     "url": "https://cnn.com",
     "likes": "300470",
     "userId": "63d276d99319627026948c41"
 }
-# dev2
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjIiLCJpZCI6IjYzZDI3NTM5ZmI3MDI1MTRmNjYwMmY0ZiIsImlhdCI6MTY3NDc0MjA4OH0.L8e9aRbc8C2cF2iXrd6i3DT5BgfAFimiidmUJgJ0ES4
-# dev3
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjMiLCJpZCI6IjYzZDI3NmQ5OTMxOTYyNzAyNjk0OGM0MSIsImlhdCI6MTY3NDc0MTMxMH0.ulKZmlGefs0FkF3xmXUsCvIna34c654LwL1oHv_NbUY
