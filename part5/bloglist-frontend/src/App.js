@@ -15,9 +15,25 @@ const App = () => {
       : setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    blogService.loginUser(username, password, setUser);
+    try {
+      const response = await blogService.loginUser(username, password);
+      window.localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
+
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem("user");
+    setUsername("");
+    setPassword("");
   };
 
   useEffect(() => {
@@ -39,7 +55,8 @@ const App = () => {
         <div>
           <h2>blogs</h2>
           <div>
-            <strong>{user.name}</strong> logged in!
+            <strong>{user.name}</strong> logged in!{" "}
+            <button onClick={handleLogout}>Logout</button>
           </div>
           <br />
           <div>

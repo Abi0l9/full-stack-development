@@ -6,9 +6,10 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const loginUser = (username, password, fn) => {
+const loginUser = (username, password) => {
   const request = axios.post("/api/login", { username, password });
-  request.then((response) => fn(response.data));
+  // request.then((response) => fn(response.data));
+  return request;
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
