@@ -1,9 +1,14 @@
 const supertest = require("supertest");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const helper = require("./test_helper");
 const app = require("../app");
 const api = supertest(app);
+
 const Blog = require("../models/blogModel");
+const User = require("../models/user");
 
 describe("all blog tests", () => {
   describe("when there are initially saved blogs", () => {
@@ -33,9 +38,22 @@ describe("all blog tests", () => {
   });
 
   describe("addition of new blogs", () => {
+    let token = "";
     beforeEach(async () => {
       await Blog.deleteMany({});
+      await User.deleteMany({});
       await Blog.insertMany(helper.initialBlogs);
+
+      const passwordHash = await bcrypt.hash("secret", 10);
+      const user = new User({ username: "root", name: "admin", passwordHash });
+
+      await user.save();
+
+      token = jwt.sign(
+        { username: user.username, id: user._id },
+        process.env.SECRET,
+        { expiresIn: 60 * 60 }
+      );
     }, 15000);
 
     test("add new blog", async () => {
@@ -48,6 +66,7 @@ describe("all blog tests", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/);
@@ -70,6 +89,7 @@ describe("all blog tests", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/);
@@ -90,6 +110,7 @@ describe("all blog tests", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
         .expect("Content-Type", /application\/json/);
