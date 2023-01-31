@@ -122,6 +122,15 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  useEffect(() => {
+    const loggedUserJson = window.localStorage.getItem("user");
+    if (loggedUserJson) {
+      const user = JSON.parse(loggedUserJson);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   return (
     <div>
       {!user ? (
