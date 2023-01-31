@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/Login";
 import NewBlog from "./components/NewBlog";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 
 const App = () => {
@@ -13,6 +14,28 @@ const App = () => {
   const [likes, setLikes] = useState("");
   const [url, setUrl] = useState("");
   const [user, setUser] = useState("");
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "",
+  });
+
+  const clearNotification = () => {
+    setTimeout(() => {
+      setNotification({
+        message: "",
+        type: "",
+      });
+    }, 5000);
+  };
+
+  const clearInputFields = () => {
+    setAuthor("");
+    setLikes("");
+    setTitle("");
+    setUrl("");
+    setUsername("");
+    setPassword("");
+  };
 
   const handleLogin = (e) => {
     e.target.name === "username"
@@ -28,18 +51,33 @@ const App = () => {
       setUser(response.data);
       blogService.setToken(response.data.token);
 
-      setUsername("");
-      setPassword("");
+      setNotification({
+        message: `${response.data.name} logged in successfully!`,
+        type: "success",
+      });
+      clearNotification();
+      clearInputFields();
     } catch (error) {
-      console.log(error);
+      clearInputFields();
+      if ((error.message = "Request failed with status code 401")) {
+        setNotification({
+          message: "Invalid Username/Password",
+          type: "error",
+        });
+        clearNotification();
+      }
     }
   };
 
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("user");
-    setUsername("");
-    setPassword("");
+    clearInputFields();
+    clearNotification();
+    setNotification({
+      message: `${user.name} logged out, successfully!`,
+      type: "success",
+    });
   };
 
   const handleBlogInput = (e) => {
@@ -64,12 +102,19 @@ const App = () => {
       newBlogObj.id = blog.id;
       setBlogs(blogs.concat(newBlogObj));
 
-      setAuthor("");
-      setLikes("");
-      setTitle("");
-      setUrl("");
+      clearInputFields();
+      clearNotification();
+      setNotification({
+        message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
+        type: "success",
+      });
     } catch (error) {
-      console.log(error);
+      clearInputFields();
+      clearNotification();
+      setNotification({
+        message: "Some fields are missing or Invalid Input",
+        type: "error",
+      });
     }
   };
 
@@ -81,6 +126,13 @@ const App = () => {
     <div>
       {!user ? (
         <div>
+          <h1>Login into the application</h1>
+
+          <Notification
+            message={notification.message}
+            type={notification.type}
+          />
+          <br />
           <LoginForm
             username={username}
             password={password}
@@ -91,6 +143,11 @@ const App = () => {
       ) : (
         <div>
           <h2>blogs</h2>
+          <Notification
+            message={notification.message}
+            type={notification.type}
+          />
+          <br />
           <div>
             <strong>{user.name}</strong> logged in!
             <button onClick={handleLogout}>Logout</button>
