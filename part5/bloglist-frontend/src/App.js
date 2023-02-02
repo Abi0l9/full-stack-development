@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/Login";
 import NewBlog from "./components/NewBlog";
@@ -13,6 +13,7 @@ const App = () => {
     message: "",
     type: "",
   });
+  const blogFormRef = useRef();
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -76,7 +77,7 @@ const App = () => {
             <button onClick={handleLogout}>Logout</button>
           </div>
           <div>
-            <Toggable buttonText="Add blog">
+            <Toggable buttonText="Add blog" ref={blogFormRef}>
               <NewBlog
                 setNotification={setNotification}
                 clearNotification={clearNotification}

@@ -31,6 +31,7 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
   const handleBlogSubmit = async (e) => {
     e.preventDefault();
 
+    // blogFormRef.current.toggleVisibilty();
     try {
       const blog = await blogService.addBlog(newBlogObj);
       newBlogObj.id = blog.id;
@@ -45,6 +46,7 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
     } catch (error) {
       clearInputFields();
       clearNotification();
+      console.log(error.message);
       setNotification({
         message: "Some fields are missing or Invalid Input",
         type: "error",
