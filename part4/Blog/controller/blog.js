@@ -6,14 +6,9 @@ const userExtractor = require("../utils/middleware").userExtractor;
 
 blogRouter.get("/info", (req, res) => res.send("Welcome!"));
 blogRouter.get("", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
   const result = await Blog.find({}).populate("user", { username: 1, name: 1 });
-  // const result = await User.findById(decodedToken.id); //.populate("blogs", {
-  //   title: 1,
-  //   url: 1,
-  //   likes: 1,
-  // });
 
   return response.json(result);
 });

@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjMiLCJpZCI6IjYzZDI3NmQ5OTMxOTYyNzAyNjk0OGM0MSIsImlhdCI6MTY3NTAzMTc5OSwiZXhwIjoxNjc1MDM1Mzk5fQ.-UF6ld0iYKDzYJlhsAzxFEYmkDUyBgORbsNnx1wSpX4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjMiLCJpZCI6IjYzZDI3NmQ5OTMxOTYyNzAyNjk0OGM0MSIsImlhdCI6MTY3NTE3MzkwMCwiZXhwIjoxNjc1MTc3NTAwfQ.YWTH9OwTqKj1FsN_PCDpr1LQCDX8RyDpduMLqx7P7Es
 
 {
-    "title": "after user middleware",
+    "title": "rrrr",
     "author": "dev3",
     "url": "https://cnn.com",
     "likes": "300470",
