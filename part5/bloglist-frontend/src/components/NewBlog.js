@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import blogService from "../services/blogs";
+import Toggable from "./Toggable";
 
 const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [likes, setLikes] = useState("");
   const [url, setUrl] = useState("");
+  const blogFormRef = useRef();
 
   const clearInputFields = () => {
     setAuthor("");
@@ -31,7 +33,7 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
   const handleBlogSubmit = async (e) => {
     e.preventDefault();
 
-    // blogFormRef.current.toggleVisibilty();
+    blogFormRef.current.toggleVisibility();
     try {
       const blog = await blogService.addBlog(newBlogObj);
       newBlogObj.id = blog.id;
@@ -56,26 +58,28 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
 
   return (
     <div>
-      <h2>Add a new blog</h2>
-      <form onSubmit={handleBlogSubmit}>
-        <div>
-          title:
-          <input name="title" value={title} onChange={handleBlogInput} />
-        </div>
-        <div>
-          author:
-          <input name="author" value={author} onChange={handleBlogInput} />
-        </div>
-        <div>
-          url:
-          <input name="url" value={url} onChange={handleBlogInput} />
-        </div>
-        <div>
-          likes:
-          <input name="likes" value={likes} onChange={handleBlogInput} />
-        </div>
-        <button>create</button>
-      </form>
+      <Toggable buttonText="Add blog" ref={blogFormRef}>
+        <h2>Add a new blog</h2>
+        <form onSubmit={handleBlogSubmit}>
+          <div>
+            title:
+            <input name="title" value={title} onChange={handleBlogInput} />
+          </div>
+          <div>
+            author:
+            <input name="author" value={author} onChange={handleBlogInput} />
+          </div>
+          <div>
+            url:
+            <input name="url" value={url} onChange={handleBlogInput} />
+          </div>
+          <div>
+            likes:
+            <input name="likes" value={likes} onChange={handleBlogInput} />
+          </div>
+          <button>create</button>
+        </form>
+      </Toggable>
     </div>
   );
 };

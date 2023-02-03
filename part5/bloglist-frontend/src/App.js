@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/Login";
 import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
-import Toggable from "./components/Toggable";
+// import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
     message: "",
     type: "",
   });
-  const blogFormRef = useRef();
+  // const blogFormRef = useRef();
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -77,14 +77,12 @@ const App = () => {
             <button onClick={handleLogout}>Logout</button>
           </div>
           <div>
-            <Toggable buttonText="Add blog" ref={blogFormRef}>
-              <NewBlog
-                setNotification={setNotification}
-                clearNotification={clearNotification}
-                setBlogs={setBlogs}
-                blogs={blogs}
-              />
-            </Toggable>
+            <NewBlog
+              setNotification={setNotification}
+              clearNotification={clearNotification}
+              setBlogs={setBlogs}
+              blogs={blogs}
+            />
           </div>
           <br />
           <div>
