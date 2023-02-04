@@ -26,5 +26,10 @@ const loginUser = (username, password) => {
   return request;
 };
 
+const updateLikes = (blogId, update) => {
+  const request = axios.patch(`${baseUrl}/${blogId}`, update);
+  return request;
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, loginUser, addBlog, setToken };
+export default { getAll, loginUser, addBlog, setToken, updateLikes };
