@@ -1,14 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({
+  setNotification,
+  clearNotification,
+  blog,
+  setBlogs,
+  blogs,
+  user,
+}) => {
   const [display, setDisplay] = useState(false);
 
   const toggleBlog = { display: display ? "" : "none" };
   const titleColor = { backgroundColor: display ? "yellow" : "" };
   const buttonRef = useRef(null);
   const likesRef = useRef(null);
+  const removeBtnRef = useRef(null);
   let [likes, setLikes] = useState(null);
+  const { username } = user;
 
   const style = {
     paddingTop: 10,
@@ -20,7 +29,10 @@ const Blog = ({ blog }) => {
 
   useEffect(() => {
     setLikes(Number(likesRef.current.textContent));
-  }, []);
+    if (username !== blog.user?.username) {
+      removeBtnRef.current.hidden = "true";
+    }
+  }, [username, blog.user?.username]);
 
   const toggleView = () => {
     if (display) {
@@ -47,6 +59,26 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const deleteSingleBlog = async () => {
+    const blogId = blog.id;
+    const blogIdx = blogs.findIndex((blog) => blog.id === blogId);
+    const message = `Remove blog ${blog.title} by ${blog.author}`;
+
+    if (window.confirm(message)) {
+      try {
+        await blogService.deleteBlog(blogId);
+        blogs.splice(blogIdx, 1);
+        setBlogs([...blogs]);
+        setNotification({ message: "Deleted successfully!", type: "success" });
+        clearNotification();
+      } catch (error) {
+        console.log(error.message);
+        setNotification({ message: "Oops...an error occurred", type: "error" });
+        clearNotification();
+      }
+    }
+  };
+
   return (
     <div style={style}>
       <div>
@@ -69,6 +101,9 @@ const Blog = ({ blog }) => {
           </p>
         </div>
         <p>{blog.author}</p>
+        <button ref={removeBtnRef} onClick={deleteSingleBlog}>
+          remove
+        </button>
       </div>
     </div>
   );

@@ -37,7 +37,8 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
     try {
       const blog = await blogService.addBlog(newBlogObj);
       newBlogObj.id = blog.id;
-      setBlogs(blogs.concat(newBlogObj));
+      blogs.concat(newBlogObj);
+      setBlogs([...blogs]);
 
       clearInputFields();
       clearNotification();
