@@ -1,5 +1,7 @@
 const Notification = ({ type, message }) => {
   const success = {
+    position: "absolute",
+    top: "3rem",
     color: "green",
     fontSize: 13,
     border: "solid 2px green",
@@ -9,6 +11,8 @@ const Notification = ({ type, message }) => {
   };
 
   const error = {
+    position: "absolute",
+    top: "3rem",
     color: "red",
     fontSize: 13,
     border: "solid 2px red",
