@@ -18,6 +18,11 @@ describe("<Toggable />", () => {
   test("renders its children", () => {
     const div = container.querySelector(".testDiv");
     expect(div).toHaveTextContent("togglable content");
+  });
+
+  test("at start the children are not displayed", () => {
+    const div = container.querySelector(".togglableContent");
     screen.debug(div);
+    expect(div).toHaveStyle("display: none");
   });
 });
