@@ -62,7 +62,7 @@ const NewBlog = ({ setNotification, clearNotification, setBlogs, blogs }) => {
       <Toggable buttonText="Add blog" ref={blogFormRef}>
         <h2>Add a new blog</h2>
         <form onSubmit={handleBlogSubmit}>
-          <div>
+          <div className="testing">
             title:
             <input name="title" value={title} onChange={handleBlogInput} />
           </div>

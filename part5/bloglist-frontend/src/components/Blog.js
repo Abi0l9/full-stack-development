@@ -81,10 +81,10 @@ const Blog = ({
 
   return (
     <div style={style}>
-      <div>
+      <div className="visibleArea">
         <p>
           <span style={titleColor} onClick={toggleView}>
-            {blog.title}
+            Title: {blog.title}
           </span>
           {"  "}
           <button ref={buttonRef} onClick={toggleView}>
@@ -93,14 +93,14 @@ const Blog = ({
         </p>
       </div>
       <div style={toggleBlog}>
-        <p>{blog.url}</p>
+        <p>Url: {blog.url}</p>
         <div>
           <p>
-            likes <span ref={likesRef}>{blog.likes}</span>{" "}
+            likes: <span ref={likesRef}>{blog.likes}</span>{" "}
             <button onClick={updateLikesField}>like</button>
           </p>
         </div>
-        <p>{blog.author}</p>
+        <p>Author: {blog.author}</p>
         <button ref={removeBtnRef} onClick={deleteSingleBlog}>
           remove
         </button>
