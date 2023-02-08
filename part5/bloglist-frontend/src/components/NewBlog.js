@@ -50,7 +50,7 @@ const NewBlog = ({ handleBlogSubmit }) => {
           likes:
           <input name="likes" value={likes} onChange={handleBlogInput} />
         </div>
-        <button type="submit">create</button>
+        <button type="submit" id='create'>create</button>
       </form>
     </div>
   );
