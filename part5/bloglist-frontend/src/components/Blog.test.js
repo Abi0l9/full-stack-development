@@ -6,6 +6,7 @@ import Blog from "./Blog";
 
 describe("<Blog />", () => {
   let container;
+  let mockHandler;
   const user = { username: "Kash" };
   const blog = {
     title: "test blog",
@@ -16,8 +17,7 @@ describe("<Blog />", () => {
   };
 
   beforeEach(() => {
-    const mockHandler = jest.fn();
-
+    mockHandler = jest.fn();
     container = render(
       <Blog user={user} updateLikesField={mockHandler} blog={blog} />
     ).container;
@@ -47,17 +47,13 @@ describe("<Blog />", () => {
     expect(div).toHaveTextContent("Author");
   });
 
-  test("test number of clicks", async () => {
-    const mockHandler = jest.fn();
-
-    render(<Blog user={user} blog={blog} updateLikesField={mockHandler} />);
-
+  test("number of clicks", async () => {
     const btnUser = userEvent.setup();
     const button = container.querySelector("#likeBtn");
 
     await btnUser.click(button);
-    screen.debug(button);
-    expect(mockHandler.mock.calls).toHaveLength(1);
-    // console.log(mockHandler.mock.calls);
+    await btnUser.click(button);
+
+    expect(mockHandler.mock.calls).toHaveLength(2);
   });
 });
