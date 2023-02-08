@@ -6,10 +6,10 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit",
-    "dev": "cross-env NODE_ENV=production nodemon index.js",
     "lint": "npx eslint index.js",
     "start:test": "cross-env NODE_ENV=test nodemon index.js",
-    "trace": "node --trace-warnings index.js"
+    "trace": "node --trace-warnings index.js",
+    "dev": "cross-env NODE_ENV=production nodemon --openssl-legacy-provider index.js"
   },
   "repository": {
     "type": "git",
