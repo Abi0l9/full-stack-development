@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import blogService from "../services/blogs";
 
-const Blog = ({
-  setNotification,
-  clearNotification,
-  blog,
-  setBlogs,
-  blogs,
-  user,
-}) => {
+const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
   const [display, setDisplay] = useState(false);
 
   const toggleBlog = { display: display ? "" : "none" };
@@ -45,40 +37,6 @@ const Blog = ({
 
   const likesPatchObj = { likes: likes };
 
-  const updateLikesField = async () => {
-    const blogId = blog.id;
-    try {
-      likesPatchObj.likes += 1;
-      const newObj = { likes: String(likesPatchObj.likes) };
-      likesRef.current.textContent = newObj.likes;
-
-      await blogService.updateLikes(blogId, newObj);
-      //update likes field immediately
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const deleteSingleBlog = async () => {
-    const blogId = blog.id;
-    const blogIdx = blogs.findIndex((blog) => blog.id === blogId);
-    const message = `Remove blog ${blog.title} by ${blog.author}`;
-
-    if (window.confirm(message)) {
-      try {
-        await blogService.deleteBlog(blogId);
-        blogs.splice(blogIdx, 1);
-        setBlogs([...blogs]);
-        setNotification({ message: "Deleted successfully!", type: "success" });
-        clearNotification();
-      } catch (error) {
-        console.log(error.message);
-        setNotification({ message: "Oops...an error occurred", type: "error" });
-        clearNotification();
-      }
-    }
-  };
-
   return (
     <div style={style}>
       <div className="visibleArea">
@@ -97,13 +55,16 @@ const Blog = ({
         <div>
           <p>
             likes: <span ref={likesRef}>{blog.likes}</span>{" "}
-            <button onClick={updateLikesField} id="likeBtn">
+            <button
+              onClick={() => updateLikesField(blog, likesPatchObj, likesRef)}
+              id="likeBtn"
+            >
               like
             </button>
           </p>
         </div>
         <p>Author: {blog.author}</p>
-        <button ref={removeBtnRef} onClick={deleteSingleBlog}>
+        <button ref={removeBtnRef} onClick={() => deleteSingleBlog(blog)}>
           remove
         </button>
       </div>

@@ -34,6 +34,40 @@ const App = () => {
     });
   };
 
+  const updateLikesField = async (blog, likesPatchObj, likesRef) => {
+    const blogId = blog.id;
+    try {
+      likesPatchObj.likes += 1;
+      const newObj = { likes: String(likesPatchObj.likes) };
+      likesRef.current.textContent = newObj.likes;
+
+      await blogService.updateLikes(blogId, newObj);
+      //update likes field immediately
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const deleteSingleBlog = async (blog) => {
+    const blogId = blog.id;
+    const blogIdx = blogs.findIndex((blog) => blog.id === blogId);
+    const message = `Remove blog ${blog.title} by ${blog.author}`;
+
+    if (window.confirm(message)) {
+      try {
+        await blogService.deleteBlog(blogId);
+        blogs.splice(blogIdx, 1);
+        setBlogs([...blogs]);
+        setNotification({ message: "Deleted successfully!", type: "success" });
+        clearNotification();
+      } catch (error) {
+        console.log(error.message);
+        setNotification({ message: "Oops...an error occurred", type: "error" });
+        clearNotification();
+      }
+    }
+  };
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
@@ -97,6 +131,8 @@ const App = () => {
                   setNotification={setNotification}
                   clearNotification={clearNotification}
                   setBlogs={setBlogs}
+                  updateLikesField={updateLikesField}
+                  deleteSingleBlog={deleteSingleBlog}
                   blogs={blogs}
                   user={user}
                 />
