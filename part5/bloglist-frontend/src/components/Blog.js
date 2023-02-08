@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
   const [display, setDisplay] = useState(false);
@@ -59,7 +60,7 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
               onClick={() => updateLikesField(blog, likesPatchObj, likesRef)}
               id="likeBtn"
             >
-              like
+              like blog
             </button>
           </p>
         </div>
@@ -70,6 +71,12 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
       </div>
     </div>
   );
+};
+
+Blog.displayName = "Blog";
+
+Blog.propTypes = {
+  updateLikesField: PropTypes.func.isRequired,
 };
 
 export default Blog;

@@ -15,11 +15,11 @@ describe("<Blog />", () => {
     user: { username: "kash" },
   };
 
-  const updateLikesField = () => true;
-
   beforeEach(() => {
+    const mockHandler = jest.fn();
+
     container = render(
-      <Blog user={user} updateLikesField={updateLikesField} blog={blog} />
+      <Blog user={user} updateLikesField={mockHandler} blog={blog} />
     ).container;
   });
 
@@ -56,7 +56,7 @@ describe("<Blog />", () => {
     const button = container.querySelector("#likeBtn");
 
     await btnUser.click(button);
-    // screen.debug(button);
+    screen.debug(button);
     expect(mockHandler.mock.calls).toHaveLength(1);
     // console.log(mockHandler.mock.calls);
   });
