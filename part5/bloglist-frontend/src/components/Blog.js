@@ -92,12 +92,14 @@ const Blog = ({
           </button>
         </p>
       </div>
-      <div style={toggleBlog}>
+      <div style={toggleBlog} className="hiddenArea">
         <p>Url: {blog.url}</p>
         <div>
           <p>
             likes: <span ref={likesRef}>{blog.likes}</span>{" "}
-            <button onClick={updateLikesField}>like</button>
+            <button onClick={updateLikesField} id="likeBtn">
+              like
+            </button>
           </p>
         </div>
         <p>Author: {blog.author}</p>
