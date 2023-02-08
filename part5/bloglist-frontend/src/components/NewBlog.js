@@ -39,8 +39,10 @@ const NewBlog = ({ handleBlogSubmit }) => {
           <input
             name="title"
             id="title"
+            data-testid="title"
             value={title}
             onChange={handleBlogInput}
+            placeholder="enter title of blog"
           />
         </div>
         <div>
@@ -48,21 +50,32 @@ const NewBlog = ({ handleBlogSubmit }) => {
           <input
             name="author"
             id="author"
+            data-testid="author"
             value={author}
             onChange={handleBlogInput}
+            placeholder="enter author's name"
           />
         </div>
         <div>
           url:
-          <input name="url" id="url" value={url} onChange={handleBlogInput} />
+          <input
+            name="url"
+            data-testid="url"
+            id="url"
+            value={url}
+            onChange={handleBlogInput}
+            placeholder="https://..."
+          />
         </div>
         <div>
           likes:
           <input
             name="likes"
             id="likes"
+            data-testid="likes"
             value={likes}
             onChange={handleBlogInput}
+            placeholder="number of likes"
           />
         </div>
         <button type="submit" id="create">

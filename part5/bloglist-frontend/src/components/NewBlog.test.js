@@ -23,6 +23,15 @@ describe("<NewBlog />", () => {
     const url = screen.getByTestId("url");
     const likes = screen.getByTestId("likes");
 
-    screen.debug(title);
+    await user.type(title, "This is the title");
+    await user.type(author, "This is the author");
+    await user.type(url, "This is the url");
+    await user.type(likes, "400");
+
+    await user.click(button);
+
+    expect(mockHandler.mock.calls).toHaveLength(1);
+    expect(mockHandler.mock.calls[0][0].title).toBe("This is the title");
+    expect(mockHandler.mock.calls[0][0].author).toBe("This is the author");
   });
 });
