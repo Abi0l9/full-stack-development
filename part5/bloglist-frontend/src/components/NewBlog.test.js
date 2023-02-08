@@ -17,5 +17,12 @@ describe("<NewBlog />", () => {
   test("test new blog", async () => {
     const user = userEvent.setup();
     const button = container.querySelector("#create");
+
+    const title = screen.getByTestId("title");
+    const author = screen.getByTestId("author");
+    const url = screen.getByTestId("url");
+    const likes = screen.getByTestId("likes");
+
+    screen.debug(title);
   });
 });
