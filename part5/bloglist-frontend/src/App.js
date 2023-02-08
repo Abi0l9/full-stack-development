@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/Login";
 import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
-// import Toggable from "./components/Toggable";
+import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
 
 const App = () => {
@@ -13,7 +13,56 @@ const App = () => {
     message: "",
     type: "",
   });
-  // const blogFormRef = useRef();
+
+  const blogFormRef = useRef();
+
+  // const clearInputFields = () => {
+  //   setAuthor("");
+  //   setLikes("");
+  //   setTitle("");
+  //   setUrl("");
+  // };
+
+  // const handleBlogInput = (e) => {
+  //   if (e.target.name === "title") {
+  //     setTitle(e.target.value);
+  //   } else if (e.target.name === "author") {
+  //     setAuthor(e.target.value);
+  //   } else if (e.target.name === "likes") {
+  //     setLikes(e.target.value);
+  //   } else {
+  //     setUrl(e.target.value);
+  //   }
+  // };
+
+  // const newBlogObj = { title, author, likes, url };
+
+  const handleBlogSubmit = async (newBlogObj) => {
+    try {
+      const blog = await blogService.addBlog(newBlogObj);
+      newBlogObj.id = blog.id;
+
+      blogs.concat(newBlogObj);
+      setBlogs([...blogs]);
+
+      blogFormRef.current.toggleVisibility();
+
+      console.log(blog);
+
+      clearNotification();
+      setNotification({
+        message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
+        type: "success",
+      });
+    } catch (error) {
+      clearNotification();
+      console.log(error.message);
+      setNotification({
+        message: "Some fields are missing or Invalid Input",
+        type: "error",
+      });
+    }
+  };
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -111,12 +160,9 @@ const App = () => {
             <button onClick={handleLogout}>Logout</button>
           </div>
           <div>
-            <NewBlog
-              setNotification={setNotification}
-              clearNotification={clearNotification}
-              setBlogs={setBlogs}
-              blogs={blogs}
-            />
+            <Toggable buttonText="Add blog" ref={blogFormRef}>
+              <NewBlog handleBlogSubmit={handleBlogSubmit} />
+            </Toggable>
           </div>
           <br />
           <div>
