@@ -128,12 +128,8 @@ const App = () => {
                 <Blog
                   key={blog.id}
                   blog={blog}
-                  setNotification={setNotification}
-                  clearNotification={clearNotification}
-                  setBlogs={setBlogs}
                   updateLikesField={updateLikesField}
                   deleteSingleBlog={deleteSingleBlog}
-                  blogs={blogs}
                   user={user}
                 />
               ))}

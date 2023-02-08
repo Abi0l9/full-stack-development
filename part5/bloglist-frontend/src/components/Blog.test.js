@@ -15,8 +15,12 @@ describe("<Blog />", () => {
     user: { username: "kash" },
   };
 
+  const updateLikesField = () => true;
+
   beforeEach(() => {
-    container = render(<Blog user={user} blog={blog} />).container;
+    container = render(
+      <Blog user={user} updateLikesField={updateLikesField} blog={blog} />
+    ).container;
   });
 
   test("visible component of the blog renders the title ", () => {
@@ -44,7 +48,6 @@ describe("<Blog />", () => {
   });
 
   test("test number of clicks", async () => {
-    // const updateLikesField = () => true;
     const mockHandler = jest.fn();
 
     render(<Blog user={user} blog={blog} updateLikesField={mockHandler} />);
