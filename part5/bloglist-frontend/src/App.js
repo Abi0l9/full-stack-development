@@ -42,12 +42,12 @@ const App = () => {
       const blog = await blogService.addBlog(newBlogObj);
       newBlogObj.id = blog.id;
 
-      blogs.concat(newBlogObj);
-      setBlogs([...blogs]);
+      setBlogs(blogs.concat(newBlogObj));
+      // setBlogs([...blogs]);
 
       blogFormRef.current.toggleVisibility();
 
-      console.log(blog);
+      // console.log(blog);
 
       clearNotification();
       setNotification({
