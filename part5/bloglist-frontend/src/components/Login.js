@@ -52,6 +52,7 @@ const LoginForm = ({ setNotification, clearNotification, setUser }) => {
           <input
             type="text"
             name="username"
+            id="username"
             value={username}
             onChange={handleLogin}
           />
@@ -61,11 +62,14 @@ const LoginForm = ({ setNotification, clearNotification, setUser }) => {
           <input
             type="password"
             name="password"
+            id="password"
             value={password}
             onChange={handleLogin}
           />
         </div>
-        <button type="submit">Login</button>
+        <button id="login-button" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
