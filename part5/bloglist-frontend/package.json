@@ -37,6 +37,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "http://localhost:3003",
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@testing-library/jest-dom": "^5.16.5",
