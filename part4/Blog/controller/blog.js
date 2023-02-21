@@ -56,11 +56,12 @@ blogRouter.patch("/:blogId", async (request, response) => {
   const blogId = request.params.blogId;
   const body = request.body;
 
-  const blog = await Blog.findByIdAndUpdate(blogId, { likes: body.likes });
+  // const blog = await Blog.findByIdAndUpdate(blogId, { likes: body.likes });
+  const blog = await Blog.findByIdAndUpdate(blogId, request.body);
   if (blog) {
     response.json({ message: "successful" }).end();
   } else {
-    return response.json({ message: "blog not found" }).status(404).end();
+    return response.status(404).json({ message: "blog not found" }).end();
   }
 });
 

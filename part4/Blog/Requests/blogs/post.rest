@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldjMiLCJpZCI6IjYzZDI3NmQ5OTMxOTYyNzAyNjk0OGM0MSIsImlhdCI6MTY3NTE3MzkwMCwiZXhwIjoxNjc1MTc3NTAwfQ.YWTH9OwTqKj1FsN_PCDpr1LQCDX8RyDpduMLqx7P7Es
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldiIsImlkIjoiNjNlYTAwNWYwMWUyMjI4OTg3ODA2ODA3IiwiaWF0IjoxNjc2MjgwMDEzLCJleHAiOjE2NzYyODM2MTN9.gajpqD_z6kAXDWgBxGRTJzTGHKNfimy547dNLVN0xc0
 
 {
-    "title": "rrrr",
-    "author": "dev3",
+    "title": "third blog",
+    "author": "khalifah",
     "url": "https://cnn.com",
-    "likes": "300470",
+    "likes": "30000",
     "userId": "63d276d99319627026948c41"
 }
