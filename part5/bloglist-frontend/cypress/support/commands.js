@@ -23,3 +23,62 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("login", ({ username, password }) => {
+  cy.request("POST", `${Cypress.env("BACKEND")}/login`, {
+    username,
+    password,
+  }).then(({ body }) => {
+    // localStorage.clear();
+    localStorage.setItem("loggedInUser", JSON.stringify(body));
+  });
+  // cy.visit("");
+});
+
+let blogId;
+
+Cypress.Commands.add("createBlog", ({ title, author, url, likes }) => {
+  cy.request({
+    url: `${Cypress.env("BACKEND")}/blogs`,
+    method: "POST",
+    body: { title, author, url, likes },
+    headers: {
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("loggedInUser")).token
+      }`,
+    },
+  }).then((result) => {
+    blogId = result.body.id;
+  });
+
+  cy.visit("");
+});
+
+Cypress.Commands.add("editBlog", ({ title }) => {
+  cy.request({
+    url: `${Cypress.env("BACKEND")}/blogs/${blogId}`,
+    method: "PATCH",
+    body: { title },
+    headers: {
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("loggedInUser")).token
+      }`,
+    },
+  });
+
+  cy.visit("");
+});
+
+Cypress.Commands.add("deleteBlog", () => {
+  cy.request({
+    url: `${Cypress.env("BACKEND")}/blogs/${blogId}`,
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("loggedInUser")).token
+      }`,
+    },
+  });
+
+  cy.visit("");
+});

@@ -30,7 +30,9 @@ const Notification = ({ type, message }) => {
 
   return (
     <div>
-      <span style={main}>{message ? message : null}</span>
+      <span style={main} className="message">
+        {message ? message : null}
+      </span>
     </div>
   );
 };

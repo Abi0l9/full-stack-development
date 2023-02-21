@@ -42,7 +42,7 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
     <div style={style}>
       <div className="visibleArea">
         <p>
-          <span style={titleColor} onClick={toggleView}>
+          <span className="title" style={titleColor} onClick={toggleView}>
             Title: {blog.title}
           </span>
           {"  "}

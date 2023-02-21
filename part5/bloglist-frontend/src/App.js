@@ -16,27 +16,6 @@ const App = () => {
 
   const blogFormRef = useRef();
 
-  // const clearInputFields = () => {
-  //   setAuthor("");
-  //   setLikes("");
-  //   setTitle("");
-  //   setUrl("");
-  // };
-
-  // const handleBlogInput = (e) => {
-  //   if (e.target.name === "title") {
-  //     setTitle(e.target.value);
-  //   } else if (e.target.name === "author") {
-  //     setAuthor(e.target.value);
-  //   } else if (e.target.name === "likes") {
-  //     setLikes(e.target.value);
-  //   } else {
-  //     setUrl(e.target.value);
-  //   }
-  // };
-
-  // const newBlogObj = { title, author, likes, url };
-
   const handleBlogSubmit = async (newBlogObj) => {
     try {
       const blog = await blogService.addBlog(newBlogObj);
