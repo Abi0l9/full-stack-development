@@ -10,6 +10,7 @@ const counterReducer = (state = initialState, action) => {
       let good = state.good;
       good++;
       const newGoodState = { ...state, good: good };
+
       return newGoodState;
     case "OK":
       let ok = state.ok;
@@ -24,9 +25,13 @@ const counterReducer = (state = initialState, action) => {
     case "ZERO":
       const newState = { ...state, good: 0, bad: 0, ok: 0 };
       return newState;
+
+    default:
+    //do nothing
   }
 
   return state;
 };
 
-export default counterReducer;
+// eslint-disable-next-line
+export default { counterReducer, initialState };
