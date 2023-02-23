@@ -1,4 +1,4 @@
-const initialState = {
+export const initialState = {
   good: 0,
   ok: 0,
   bad: 0,
@@ -33,5 +33,22 @@ const counterReducer = (state = initialState, action) => {
   return state;
 };
 
-// eslint-disable-next-line
-export default { counterReducer, initialState };
+export const incrementGood = () => {
+  return {
+    type: "GOOD",
+  };
+};
+
+export const incrementBad = () => {
+  return { type: "BAD" };
+};
+
+export const incrementOk = () => {
+  return { type: "OK" };
+};
+
+export const resetValues = () => {
+  return { type: "ZERO" };
+};
+
+export default counterReducer;

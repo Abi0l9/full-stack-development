@@ -1,38 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import unicafeServices from "./reducer";
 import { createStore } from "redux";
+import { Provider } from "react-redux";
 
-const store = createStore(unicafeServices.counterReducer);
+import App from "./App";
+import counterReducer from "./reducer";
 
-const App = () => {
-  console.log();
-  return (
-    <div>
-      <div>
-        <button onClick={(e) => store.dispatch({ type: "GOOD" })}>Good</button>{" "}
-        <span>{store.getState().good}</span>
-      </div>
-      <div>
-        <button onClick={(e) => store.dispatch({ type: "BAD" })}>Bad</button>{" "}
-        <span>{store.getState().bad}</span>
-      </div>
-      <div>
-        <button onClick={(e) => store.dispatch({ type: "OK" })}>ok</button>{" "}
-        <span>{store.getState().ok}</span>
-      </div>
-      <div>
-        <button onClick={(e) => store.dispatch({ type: "ZERO" })}>Reset</button>{" "}
-      </div>
-    </div>
-  );
-};
+const store = createStore(counterReducer);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
-const renderApp = () => {
-  root.render(<App />);
-};
-
-renderApp();
-store.subscribe(renderApp);
+// store.subscribe(renderApp);
