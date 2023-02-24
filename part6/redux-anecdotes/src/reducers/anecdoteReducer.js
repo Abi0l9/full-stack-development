@@ -20,9 +20,10 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject);
 
 const reducer = (state = initialState, action) => {
+  let newState;
   switch (action.type) {
     case "VOTE":
-      const newState = state.map((anec) => {
+      newState = state.map((anec) => {
         if (anec.id === action.id) {
           let votes = anec.votes;
           votes++;
@@ -32,8 +33,12 @@ const reducer = (state = initialState, action) => {
 
         return anec;
       });
-
       return newState;
+    case "ADD":
+      newState = state.concat(action.anecdote);
+      state = newState;
+      return state;
+
     default:
     // do nothing
   }
@@ -45,6 +50,17 @@ export const incrementVotes = (id) => {
   return {
     type: "VOTE",
     id: id,
+  };
+};
+
+export const addAnecdote = (anec) => {
+  return {
+    type: "ADD",
+    anecdote: {
+      content: anec,
+      id: getId(),
+      votes: 0,
+    },
   };
 };
 
