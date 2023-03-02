@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { filterChange } from "../reducers/filterReducer";
 import AnecdoteList from "./AnecdoteList";
 
@@ -7,8 +7,11 @@ const Filter = () => {
   const anecdotes = useSelector((state) => state.anecdotes);
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
+  let handler = useRef(null);
 
-  const handleChange = (e) => {
+  useEffect(() => {});
+
+  handler.current = (e) => {
     setInput(e.target.value);
   };
 
@@ -16,27 +19,21 @@ const Filter = () => {
     filterChange(
       anecdotes.filter((anec) => anec.content.toLowerCase().includes(input))
     )
-  );
+  ).payload;
 
   return (
     <div>
       <br />
 
-      <form>
+      <form onChange={handler.current}>
         <label htmlFor="filter" style={{ display: "block" }}>
           Filter anecdotes
         </label>
-        <input
-          type="text"
-          name="filter"
-          id="filter"
-          onChange={handleChange}
-          value={input}
-        />
+        <input type="text" name="filter" id="filter" />
       </form>
       <br />
       <div>
-        <AnecdoteList anecdotes={result.filter} />
+        <AnecdoteList anecdotes={result} />
       </div>
     </div>
   );
