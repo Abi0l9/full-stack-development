@@ -21,7 +21,7 @@ const Notification = () => {
     }
   }, [dispatch, notification]);
 
-  return <div style={style}>{notification}</div>;
+  return <div style={style}>you voted '{notification}'</div>;
 };
 
 export default Notification;

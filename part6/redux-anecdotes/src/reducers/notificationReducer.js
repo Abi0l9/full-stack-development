@@ -4,8 +4,9 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: "",
   reducers: {
-    newAnecdote(state, action) {
-      state = action.payload;
+    newVote(state, action) {
+      const content = action.payload;
+      state = content;
       return state;
     },
     clearNotification(state, action) {
@@ -15,6 +16,7 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { newAnecdote, clearNotification } = notificationSlice.actions;
+export const { newAnecdote, clearNotification, newVote } =
+  notificationSlice.actions;
 
 export default notificationSlice.reducer;
