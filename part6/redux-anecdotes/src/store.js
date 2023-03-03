@@ -1,11 +1,8 @@
-import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
-// import { ThunkMiddleware } from "redux-thunk";
+import { configureStore } from "@reduxjs/toolkit";
 
 import anecdoteReducer from "./reducers/anecdoteReducer";
 import filterReducer from "./reducers/filterReducer";
 import notificationReducer from "./reducers/notificationReducer";
-
-// const composedEnhancer = applyMiddleware(ThunkMiddleware);
 
 const store = configureStore({
   reducer: {

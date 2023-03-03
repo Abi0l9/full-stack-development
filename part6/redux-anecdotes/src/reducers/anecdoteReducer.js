@@ -40,15 +40,14 @@ export const { addAnecdote, incrementVotes, appendAnecdote, setAnecdotes } =
 export const initializeAnecdotes = () => {
   return async (dispatch) => {
     const anecdotes = await anecdoteServices.getAll();
-    console.log(anecdotes);
-    dispatch(anecdotes);
+    dispatch(setAnecdotes(anecdotes));
   };
 };
 
 export const createAnecdote = (content) => {
   return async (dispatch) => {
     const newAnecdote = await anecdoteServices.createNew(content);
-    dispatch(newAnecdote);
+    dispatch(appendAnecdote(newAnecdote));
   };
 };
 
