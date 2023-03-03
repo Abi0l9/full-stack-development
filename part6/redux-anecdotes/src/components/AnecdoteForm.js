@@ -1,15 +1,24 @@
 import { useDispatch } from "react-redux";
-import { addAnecdote } from "../reducers/anecdoteReducer";
+import { createAnecdote } from "../reducers/anecdoteReducer";
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
+  const getId = () => (100000 * Math.random()).toFixed(0);
 
-  const addAnec = (e) => {
+  const addAnec = async (e) => {
     e.preventDefault();
     let input = e.target.anecdote.value;
-    dispatch(addAnecdote(input));
+    const data = {
+      content: input,
+      id: getId(),
+      votes: 0,
+    };
+
+    dispatch(createAnecdote(data));
+
     e.target.anecdote.value = "";
   };
+
   return (
     <div>
       <h2>create new</h2>
