@@ -12,5 +12,10 @@ const createNew = async (object) => {
   return request.data;
 };
 
+const updateVotes = async (id, vote) => {
+  const request = await axios.patch(`${baseUrl}/${id}`, vote);
+  return request.data;
+};
+
 // eslint-disable-next-line
-export default { getAll, createNew };
+export default { getAll, createNew, updateVotes };
