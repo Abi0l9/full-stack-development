@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { clearNotification } from "../reducers/notificationReducer";
+// import { useEffect } from "react";
+import { useSelector } from "react-redux";
+// import { clearNotification } from "../reducers/notificationReducer";
 
 const Notification = () => {
-  const dispatch = useDispatch();
   let notification = useSelector((notification) => notification.notification);
 
   const style = {
@@ -12,14 +11,6 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1,
   };
-
-  useEffect(() => {
-    if (notification) {
-      setTimeout(() => {
-        dispatch(clearNotification());
-      }, 5000);
-    }
-  }, [dispatch, notification]);
 
   return <div style={style}>you voted '{notification}'</div>;
 };

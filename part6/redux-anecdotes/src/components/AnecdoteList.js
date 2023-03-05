@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
-// import { incrementVotes } from "../reducers/anecdoteReducer";
-import { newVote } from "../reducers/notificationReducer";
 import { voteIncrement } from "../reducers/anecdoteReducer";
+import { notification } from "../reducers/notificationReducer";
 
 const AnecdoteList = ({ anecdotes }) => {
   const dispatch = useDispatch();
@@ -10,16 +9,13 @@ const AnecdoteList = ({ anecdotes }) => {
     dispatch(voteIncrement(id, votes));
   };
 
-  const notification = (content) => {
-    dispatch(newVote(content));
-  };
-
   const handleVoteNotification = (id, content, votes) => {
     let votesCount = Number(votes);
     const newVotes = { votes: (votesCount += 1) };
 
     vote(id, newVotes);
-    notification(content);
+
+    dispatch(notification(content, 1000));
   };
 
   return (
