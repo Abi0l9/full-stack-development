@@ -16,7 +16,10 @@ const AnecdoteForm = () => {
   const onCreate = (event) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
-    newAnecdote.mutate({ content: content, id: getId(), votes: 0 });
+
+    const data = { content: content, id: getId(), votes: 0 };
+
+    newAnecdote.mutate(data);
     event.target.anecdote.value = "";
   };
 
