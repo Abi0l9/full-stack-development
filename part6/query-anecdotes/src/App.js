@@ -1,29 +1,28 @@
-import axios from "axios";
-import { useQuery } from "react-query";
-import { getAnecdotes } from "./services/requests";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getAnecdotes, updateAnecdote } from "./services/requests";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 
 const App = () => {
+  const queryClient = useQueryClient();
+  const updateMutation = useMutation(updateAnecdote, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("anecdotes");
+    },
+  });
   const handleVote = (anecdote) => {
-    console.log("vote");
+    let votes = anecdote.votes + 1;
+    let newObj = { id: anecdote.id, votes };
+    updateMutation.mutate(newObj);
   };
 
-  const result = useQuery("anecdotes", getAnecdotes);
+  const result = useQuery("anecdotes", getAnecdotes, { retry: 1 });
 
   if (result.isLoading) {
-    return <div>Loading data</div>;
+    return <div>Anecdote service is not available due to server problems</div>;
   }
 
   const anecdotes = result.data;
-
-  // const anecdotes = [
-  //   {
-  //     content: "If it hurts, do it more often",
-  //     id: "47145",
-  //     votes: 0,
-  //   },
-  // ];
 
   return (
     <div>
