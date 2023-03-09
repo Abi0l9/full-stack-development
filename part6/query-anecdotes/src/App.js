@@ -2,9 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getAnecdotes, updateAnecdote } from "./services/requests";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
+import {
+  clearNotitification,
+  makeNotitification,
+  useNotificationDispatch,
+} from "./notificationContext";
 
 const App = () => {
   const queryClient = useQueryClient();
+  const notificationDispatch = useNotificationDispatch();
 
   const updateMutation = useMutation(updateAnecdote, {
     onSuccess: (updatedAnecdote) => {
@@ -26,6 +32,8 @@ const App = () => {
     let votes = anecdote.votes + 1;
     let newObj = { id: anecdote.id, votes };
     updateMutation.mutate(newObj);
+    makeNotitification(notificationDispatch, anecdote);
+    clearNotitification(notificationDispatch);
   };
 
   const result = useQuery("anecdotes", getAnecdotes, { retry: 1 });
@@ -39,7 +47,6 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
-
       <Notification />
       <AnecdoteForm />
 
