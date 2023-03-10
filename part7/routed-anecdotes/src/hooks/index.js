@@ -18,15 +18,3 @@ export const useField = (name) => {
     onChange,
   };
 };
-
-export const useReset = () => {
-  //   const [value, setValue] = useState("");
-
-  const onClick = (e) => {
-    e.preventDefault();
-    // return () => (e.target.value = "");
-    console.log(e.target.value);
-  };
-  //   setValue(()=> e.target.value = "")
-  return { onClick };
-};
