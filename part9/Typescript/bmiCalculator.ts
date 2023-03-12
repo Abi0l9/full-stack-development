@@ -3,7 +3,7 @@ const calculateBmi = (height: number, weight: number): string => {
   const result = Number((weight / (heightInMtrs * heightInMtrs)).toFixed(1));
 
   if (result < 18.5) {
-    return "Underweight (Unhealthy weight)";
+    return "Underweight (Unhealthy)";
   } else if (result < 24.9) {
     return `Normal (Healthy weight)`;
   } else if (result < 29.9) {
