@@ -1,3 +1,5 @@
+import { isNumber } from "./utils";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -7,6 +9,20 @@ interface Result {
   target: number;
   average: number;
 }
+
+const parseArguments = (args: string[]) => {
+  const [, , ...rest] = args;
+  const valsCheck = rest.every((val) => isNumber(val));
+
+  if (rest.length < 2) throw new Error("not enough arguments");
+  if (valsCheck) {
+    const pars = rest.map((el) => Number(el));
+    const target = pars.pop();
+    return [target, ...pars];
+  } else {
+    throw new Error("parameters have to be numbers");
+  }
+};
 
 const calculateExercises = (args: number[], target: number): Result => {
   const periodLength = args.length;
@@ -37,4 +53,13 @@ const calculateExercises = (args: number[], target: number): Result => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const [target, ...days] = parseArguments(process.argv);
+  console.log(calculateExercises(days, target));
+} catch (error) {
+  let errorMsg = "Something happened :";
+  if (error instanceof Error) {
+    errorMsg += error.message;
+  }
+  console.log(errorMsg);
+}
