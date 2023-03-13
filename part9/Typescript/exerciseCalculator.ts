@@ -10,14 +10,16 @@ interface Result {
   average: number;
 }
 
-const parseArguments = (args: string[]) => {
+const parseArguments = (args: string[]): number[] => {
   const [, , ...rest] = args;
   const valsCheck = rest.every((val) => isNumber(val));
 
   if (rest.length < 2) throw new Error("not enough arguments");
   if (valsCheck) {
     const pars = rest.map((el) => Number(el));
-    const target = pars.pop();
+
+    let target = pars.pop()!;
+
     return [target, ...pars];
   } else {
     throw new Error("parameters have to be numbers");
@@ -33,7 +35,7 @@ const calculateExercises = (args: number[], target: number): Result => {
   const avgFixed = +average.toFixed(1);
   const rating = avgFixed < 1 ? 1 : avgFixed > 1 && avgFixed < 2 ? 2 : 3;
 
-  let ratingDescription;
+  let ratingDescription = "";
   if (rating === 1) {
     ratingDescription = "This isn't a good result, strive to do better";
   } else if (rating === 2) {
@@ -54,7 +56,10 @@ const calculateExercises = (args: number[], target: number): Result => {
 };
 
 try {
-  const [target, ...days] = parseArguments(process.argv);
+  let target: number;
+  let days: number[];
+  [target, ...days] = parseArguments(process.argv);
+  // const target = parseArguments(process.argv)
   console.log(calculateExercises(days, target));
 } catch (error) {
   let errorMsg = "Something happened :";

@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const heightInMtrs: number = height / 100;
   const result = Number((weight / (heightInMtrs * heightInMtrs)).toFixed(1));
 
@@ -15,6 +15,10 @@ const calculateBmi = (height: number, weight: number): string => {
   } else if (result > 40.0) {
     return `Obesity (Class 2)`;
   }
-};
 
-console.log(calculateBmi(200, 174));
+  if (weight === null || height === null) {
+    return `one or two parameters missing`;
+  }
+
+  return "malformated parameters";
+};
