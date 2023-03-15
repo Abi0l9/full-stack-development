@@ -1,4 +1,4 @@
-import express from "express";
+import express = require("express");
 import diagnosisServices from "../services/diagnoses";
 
 const router = express.Router();

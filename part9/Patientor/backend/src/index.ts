@@ -1,5 +1,6 @@
-import express from "express";
-import cors from "cors";
+// import express from "express";
+import express = require("express");
+import cors = require("cors");
 import patientsRouter from "./routes/patients";
 import diagnosesRouter from "./routes/diagnoses";
 
