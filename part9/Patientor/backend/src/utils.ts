@@ -44,18 +44,17 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   if (
     "name" in object &&
     "ssn" in object &&
+    "dateOfBirth" in object &&
     "occupation" in object &&
-    "date" in object &&
     "gender" in object
   ) {
     const newEntry: NewPatientEntry = {
       name: parseStr(object.name),
-      dateOfBirth: parseDate(object.date),
+      dateOfBirth: parseDate(object.dateOfBirth),
       ssn: parseStr(object.ssn),
       gender: parseGender(object.gender),
       occupation: parseStr(object.occupation),
     };
-    console.log(object);
 
     return newEntry;
   }

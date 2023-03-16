@@ -36,17 +36,16 @@ const toNewPatientEntry = (object) => {
     }
     if ("name" in object &&
         "ssn" in object &&
+        "dateOfBirth" in object &&
         "occupation" in object &&
-        "date" in object &&
         "gender" in object) {
         const newEntry = {
             name: parseStr(object.name),
-            dateOfBirth: parseDate(object.date),
+            dateOfBirth: parseDate(object.dateOfBirth),
             ssn: parseStr(object.ssn),
             gender: parseGender(object.gender),
             occupation: parseStr(object.occupation),
         };
-        console.log(object);
         return newEntry;
     }
     throw new Error("Incorrect data: some parameters missing");
