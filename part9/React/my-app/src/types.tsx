@@ -36,3 +36,8 @@ export type CoursePart =
   | CoursePartGroup
   | CoursePartBackround
   | CoursePartSpecial;
+
+export interface Note {
+  id: number;
+  content: string;
+}

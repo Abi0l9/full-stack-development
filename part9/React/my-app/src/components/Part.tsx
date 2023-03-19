@@ -1,14 +1,15 @@
 import { CoursePart } from "../types";
 import { assertNever } from "../utils";
+import "./Part.css";
 
 const Part = ({ content }: { content: CoursePart[] }) => {
   return (
     <div>
-      {content.map((part) => {
+      {content.map((part, index) => {
         switch (part.kind) {
           case "basic":
             return (
-              <div key={part.name} style={{ marginBottom: "1rem" }}>
+              <div key={part.name + index} className="block">
                 <b>
                   {part.name} {part.exerciseCount}
                 </b>
@@ -18,7 +19,7 @@ const Part = ({ content }: { content: CoursePart[] }) => {
             );
           case "background":
             return (
-              <div key={part.name} style={{ marginBottom: "1rem" }}>
+              <div key={part.name + index} className="block">
                 <b>
                   {part.name} {part.exerciseCount}
                 </b>
@@ -30,7 +31,7 @@ const Part = ({ content }: { content: CoursePart[] }) => {
             );
           case "group":
             return (
-              <div key={part.name} style={{ marginBottom: "1rem" }}>
+              <div key={part.name + index} className="block">
                 <b>
                   {part.name} {part.exerciseCount}
                 </b>
@@ -40,14 +41,20 @@ const Part = ({ content }: { content: CoursePart[] }) => {
             );
           case "special":
             return (
-              <div key={part.name} style={{ marginBottom: "1rem" }}>
+              <div key={part.name + index} className="block">
                 <b>
                   {part.name} {part.exerciseCount}
                 </b>
                 <br />
                 <i>{part.description}</i>
                 <br />
-                <span>required skills: {part.requirements.join(", ")}.</span>
+                <span>
+                  required skills:{" "}
+                  {part.requirements.length > 1
+                    ? part.requirements.join(", ")
+                    : part.requirements[0]}
+                  .
+                </span>
               </div>
             );
           default:
