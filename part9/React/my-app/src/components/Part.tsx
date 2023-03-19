@@ -1,4 +1,5 @@
 import { CoursePart } from "../types";
+import { assertNever } from "../utils";
 
 const Part = ({ content }: { content: CoursePart[] }) => {
   return (
@@ -37,8 +38,20 @@ const Part = ({ content }: { content: CoursePart[] }) => {
                 <span>project exercises {part.groupProjectCount}</span>
               </div>
             );
+          case "special":
+            return (
+              <div key={part.name} style={{ marginBottom: "1rem" }}>
+                <b>
+                  {part.name} {part.exerciseCount}
+                </b>
+                <br />
+                <i>{part.description}</i>
+                <br />
+                <span>required skills: {part.requirements.join(", ")}.</span>
+              </div>
+            );
           default:
-            break;
+            return assertNever(part);
         }
       })}
     </div>
@@ -46,12 +59,3 @@ const Part = ({ content }: { content: CoursePart[] }) => {
 };
 
 export default Part;
-
-// case "group":
-//   return part.name;
-
-//   break;
-// case "background":
-//   console.log(part.name);
-
-//   return part.name;
