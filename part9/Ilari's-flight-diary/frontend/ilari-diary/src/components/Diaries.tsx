@@ -7,7 +7,7 @@ const Diaries = () => {
 
   useEffect(() => {
     DiaryServices.getAll().then((data) => setDiaries(data));
-  });
+  }, [diaries]);
   return (
     <div>
       <h2>Diary Entries</h2>
@@ -16,7 +16,8 @@ const Diaries = () => {
           <div key={diary.id}>
             <h3>{diary.date}</h3>
             <p>
-              visibility: {diary.visibility}< br/>
+              visibility: {diary.visibility}
+              <br />
               weather: {diary.weather}
             </p>
           </div>
