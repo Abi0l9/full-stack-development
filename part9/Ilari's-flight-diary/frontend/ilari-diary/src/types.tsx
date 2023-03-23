@@ -52,7 +52,7 @@ export interface DiaryEntries {
 }
 
 export interface NewDiaryEntries extends DiaryEntries {
-  id: number;
+  id: string;
 }
 
 export type objt = Record<string, any>;

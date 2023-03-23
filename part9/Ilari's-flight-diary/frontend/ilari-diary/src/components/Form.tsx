@@ -25,9 +25,14 @@ const Form = ({ elements }: { elements: Element[] }) => {
 
     const buttonValueToBeRemoved = Object.keys(values).at(-1);
 
-    delete values[`${buttonValueToBeRemoved}`];
+    const newValues = { ...values };
+    if (Object.keys(values).length === Object.keys(newValues).length) {
+      delete newValues[`${buttonValueToBeRemoved}`];
+    }
+
     try {
-      DiaryServices.AddDiary(values as NewDiaryEntries); //here
+      DiaryServices.AddDiary(newValues as NewDiaryEntries); //here
+      console.log(newValues);
       if (
         textFieldsRef.current &&
         dateFieldsRef.current &&

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { NewDiaryEntries } from "../types";
-const baseUrl: string = "http://localhost:3000/api/diaries";
+const baseUrl: string = "http://localhost:3001/api/diaries";
 
 const getAll = () => {
   const request = axios
