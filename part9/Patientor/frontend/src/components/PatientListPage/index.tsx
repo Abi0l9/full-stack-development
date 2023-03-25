@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Route, Link, Routes, useMatch } from "react-router-dom";
 import {
   Box,
   Table,
@@ -13,6 +14,7 @@ import axios from "axios";
 
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
+import PatientPage from "../Patient/PatientPage";
 
 import HealthRatingBar from "../HealthRatingBar";
 
@@ -77,7 +79,10 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell>
+                <Link to={`/patients/${patient.id}`}>{patient.name}</Link>
+              </TableCell>
+
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
@@ -87,6 +92,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
           ))}
         </TableBody>
       </Table>
+
       <AddPatientModal
         modalOpen={modalOpen}
         onSubmit={submitNewPatient}
