@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Link, Routes, useMatch } from "react-router-dom";
+import {  useState } from "react";
+import {  Link } from "react-router-dom";
 import {
   Box,
   Table,
@@ -14,7 +14,6 @@ import axios from "axios";
 
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
-import PatientPage from "../Patient/PatientPage";
 
 import HealthRatingBar from "../HealthRatingBar";
 
