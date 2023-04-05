@@ -1,7 +1,7 @@
 import patientsData from "../data/patients";
 import { PatientDetails, NewPatientEntry, NonSensitivePatient } from "../types";
 import { v1 as uuid } from "uuid";
-// import diagnosesServices from "./diagnoses";
+import diagnosesServices from "./diagnoses";
 
 const id = uuid();
 
@@ -13,7 +13,16 @@ const getEntries = () => {
 
 const findById = (id: string): NonSensitivePatient | undefined => {
   const patient = data.find((pat) => pat.id === id);
-  // const diagnoses = diagnosesServices.getEntries();
+  const diagnoses = diagnosesServices.getEntries();
+  // if(patient && 'entries' in patient){
+  //     patient.entries.forEach(entry =>{
+  //       if('diagnosisCodes' in entry){
+  //         diagnoses.map(diag => diag.code ===)
+  //       }
+  //     })
+  // } 
+
+  console.log(diagnoses)
 
   return patient;
 };
