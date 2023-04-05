@@ -20,21 +20,21 @@ function PatientPage({ patientDetails }: Props) {
             <br />
             occupation: {patientDetails.occupation}
           </p>
-          <p>
+          <div>
             <b>entries</b>
-            {patientDetails.entries.map((entry) => (
+            {patientDetails?.entries?.map((entry) => (
               <div key={entry.id}>
                 <p>
                   {entry.date} - {entry.description}
                 </p>
                 <ul>
-                  {entry.diagnosisCodes?.map((diag) => (
+                  {entry?.diagnosisCodes?.map((diag) => (
                     <li key={diag}>{diag}</li>
                   ))}
                 </ul>
               </div>
             ))}
-          </p>
+          </div>
         </div>
       )}
     </div>
