@@ -1,20 +1,21 @@
 import { Patient } from "../../types";
 import MaleIcon from "@mui/icons-material/Male";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import FemaleIcon from "@mui/icons-material/Female";
-import { Diagnosis } from "../../types";
-import diagnosisServices from "../../services/diagnoses";
+// import { Diagnosis } from "../../types";
+// import diagnosisServices from "../../services/diagnoses";
+import EntryDetails from "./EntryDetails";
 
 interface Props {
   patientDetails: Patient | undefined | null;
 }
 
 function PatientPage({ patientDetails }: Props) {
-  const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
+  // const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
 
-  useEffect(() => {
-    diagnosisServices.getAll().then((data) => setDiagnosis(data));
-  });
+  // useEffect(() => {
+  //   diagnosisServices.getAll().then((data) => setDiagnosis(data));
+  // });
 
   return (
     <div>
@@ -31,18 +32,9 @@ function PatientPage({ patientDetails }: Props) {
           </p>
           <div>
             <b>entries</b>
-            {patientDetails?.entries?.map((entry) => (
-              <div key={entry.id}>
-                <p>
-                  {entry.date} - {entry.description}
-                </p>
-                <ul>
-                  {entry?.diagnosisCodes?.map((diag) => (
-                    <li key={diag}>
-                      {diag} - {diagnosis.map((d) => d.code === diag && d.name)}
-                    </li>
-                  ))}
-                </ul>
+            {patientDetails?.entries?.map((entry, id) => (
+              <div key={id}>
+                <EntryDetails entry={entry} />
               </div>
             ))}
           </div>
