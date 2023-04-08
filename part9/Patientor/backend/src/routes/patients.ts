@@ -1,6 +1,6 @@
 import express = require("express");
 import patientServices from "../services/patients";
-import toNewPatientEntry, { healthCheckEntryParser } from "../utils";
+import toNewPatientEntry, { entryParser } from "../utils";
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.post("/:id/entries", (request, response) => {
   const id = request.params.id;
 
   try {
-    const newEntry = healthCheckEntryParser(body);
+    const newEntry = entryParser(body);
     const data = patientServices.addEntryById(id, newEntry);
     if (data) response.send(data);
     else response.sendStatus(404);

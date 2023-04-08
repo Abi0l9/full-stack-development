@@ -7,6 +7,8 @@ import {
   Entry,
   HospitalEntry,
   Discharge,
+  sickLeave,
+  OccupationalHealthcareEntry,
 } from "./types";
 
 const isString = (str: unknown): str is string => {
@@ -42,12 +44,26 @@ const isHospital = (type: string) => {
   return type === "Hospital";
 };
 
+const isOccupationalHealthcare = (type: string) => {
+  return type === "OccupationalHealthcare";
+};
+
 const parseHealthCheck = (str: unknown): "HealthCheck" => {
   if (!str || !isString(str) || !isHealthCheck(str)) {
     throw new Error(`Incorrect parameter or missing '${str}'`);
   }
 
   return "HealthCheck";
+};
+
+const parseOccupationalHealthcare = (
+  str: unknown
+): "OccupationalHealthcare" => {
+  if (!str || !isString(str) || !isOccupationalHealthcare(str)) {
+    throw new Error(`Incorrect parameter or missing '${str}'`);
+  }
+
+  return "OccupationalHealthcare";
 };
 
 const parseHospital = (str: unknown): "Hospital" => {
@@ -91,13 +107,24 @@ const parseDiagnosisCode = (
 };
 
 const parseDischarge = (object: Discharge): Discharge => {
-  if (
-    !object ||
-    typeof object !== "object" ||
-    !("date" in object) ||
-    !("criteria" in object)
-  ) {
+  if (!object || typeof object !== "object") {
     throw new Error("Incorrect parameter or missing data ");
+  } else if (!("date" in object)) {
+    throw new Error("Incorrect parameter or missing data 'date' ");
+  } else if (!("criteria" in object)) {
+    throw new Error("Incorrect parameter or missing data 'criteria' ");
+  }
+
+  return object;
+};
+
+export const parseSickLeave = (object: sickLeave): sickLeave => {
+  if (!object || typeof object !== "object") {
+    throw new Error("Incorrect parameter or missing data ");
+  } else if (!("startDate" in object)) {
+    throw new Error("Incorrect parameter or missing data 'startDate' ");
+  } else if (!("endDate" in object)) {
+    throw new Error("Incorrect parameter or missing data 'endDate' ");
   }
 
   return object;
@@ -133,42 +160,43 @@ export const assertNever = (value: any): never => {
   throw new Error(`Unhandled type included, ${JSON.stringify(value)}`);
 };
 
-export const healthCheckEntryParser = (
-  object: HealthCheckEntry
-): HealthCheckEntry => {
-  switch (object.type) {
-    case "HealthCheck":
-      return {
-        id: parseStr(object.id),
-        date: parseDate(object.date),
-        specialist: parseStr(object.specialist),
-        type: parseHealthCheck(object.type),
-        description: parseStr(object.description),
-        diagnosisCodes: parseDiagnosisCode(object.diagnosisCodes),
-        healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
-      };
-
-    default:
-      return assertNever(object);
-  }
+const healthCheckEntryParser = (object: HealthCheckEntry): HealthCheckEntry => {
+  return {
+    id: parseStr(object.id),
+    date: parseDate(object.date),
+    specialist: parseStr(object.specialist),
+    type: parseHealthCheck(object.type),
+    description: parseStr(object.description),
+    diagnosisCodes: parseDiagnosisCode(object.diagnosisCodes),
+    healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+  };
 };
 
-export const hospitalEntryParser = (object: HospitalEntry): HospitalEntry => {
-  switch (object.type) {
-    case "Hospital":
-      return {
-        id: parseStr(object.id),
-        date: parseDate(object.date),
-        specialist: parseStr(object.specialist),
-        type: parseHospital(object.type),
-        description: parseStr(object.description),
-        diagnosisCodes: parseDiagnosisCode(object.diagnosisCodes),
-        discharge: parseDischarge(object.discharge),
-      };
+const hospitalEntryParser = (object: HospitalEntry): HospitalEntry => {
+  return {
+    id: parseStr(object.id),
+    date: parseDate(object.date),
+    specialist: parseStr(object.specialist),
+    type: parseHospital(object.type),
+    description: parseStr(object.description),
+    diagnosisCodes: parseDiagnosisCode(object.diagnosisCodes),
+    discharge: parseDischarge(object.discharge),
+  };
+};
 
-    default:
-      return assertNever(object.type);
-  }
+const occupationalHealthcareParser = (
+  object: OccupationalHealthcareEntry
+): OccupationalHealthcareEntry => {
+  return {
+    id: parseStr(object.id),
+    date: parseDate(object.date),
+    specialist: parseStr(object.specialist),
+    type: parseOccupationalHealthcare(object.type),
+    description: parseStr(object.description),
+    diagnosisCodes: parseDiagnosisCode(object.diagnosisCodes),
+    employerName: parseStr(object.employerName),
+    sickLeave: object.sickLeave && parseSickLeave(object.sickLeave),
+  };
 };
 
 export const entryParser = (object: Entry): Entry => {
@@ -177,9 +205,11 @@ export const entryParser = (object: Entry): Entry => {
       return healthCheckEntryParser(object);
     case "Hospital":
       return hospitalEntryParser(object);
+    case "OccupationalHealthcare":
+      return occupationalHealthcareParser(object);
 
     default:
-      return assertNever(object.type);
+      return assertNever(object);
   }
 };
 
