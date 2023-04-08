@@ -1,6 +1,6 @@
 import express = require("express");
 import patientServices from "../services/patients";
-import toNewPatientEntry from "../utils";
+import toNewPatientEntry, { healthCheckEntryParser } from "../utils";
 
 const router = express.Router();
 
@@ -17,8 +17,25 @@ router.get("/:id", (request, response) => {
   else return response.sendStatus(404);
 });
 
+router.post("/:id/entries", (request, response) => {
+  const body = request.body;
+  const id = request.params.id;
+
+  try {
+    const newEntry = healthCheckEntryParser(body);
+    const data = patientServices.addEntryById(id, newEntry);
+    if (data) response.send(data);
+    else response.sendStatus(404);
+  } catch (error) {
+    let errorMsg = "Something occured: ";
+    if (error instanceof Error) {
+      errorMsg += error.message;
+    }
+    response.json({ error: errorMsg });
+  }
+});
+
 router.post("/", (request, response) => {
-  //   const { name, dateOfBirth, ssn, gender, occupation } = request.body;
   try {
     const newEntry = toNewPatientEntry(request.body);
     const addedEntry = patientServices.addEntry(newEntry);
