@@ -1,22 +1,17 @@
 import { Patient } from "../../types";
 import MaleIcon from "@mui/icons-material/Male";
-// import { useEffect, useState } from "react";
+
 import FemaleIcon from "@mui/icons-material/Female";
-// import { Diagnosis } from "../../types";
-// import diagnosisServices from "../../services/diagnoses";
+
 import EntryDetails from "./EntryDetails";
+import { Button } from "@mui/material";
+import AddEntryForm from "../AddEntryForm.tsx";
 
 interface Props {
   patientDetails: Patient | undefined | null;
 }
 
 function PatientPage({ patientDetails }: Props) {
-  // const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
-
-  // useEffect(() => {
-  //   diagnosisServices.getAll().then((data) => setDiagnosis(data));
-  // });
-
   return (
     <div>
       {patientDetails && (
@@ -30,6 +25,7 @@ function PatientPage({ patientDetails }: Props) {
             <br />
             occupation: {patientDetails.occupation}
           </p>
+          <AddEntryForm />
           <div>
             <b>entries</b>
             {patientDetails?.entries?.map((entry, id) => (
@@ -40,6 +36,14 @@ function PatientPage({ patientDetails }: Props) {
           </div>
         </div>
       )}
+      <Button
+        color="primary"
+        variant="contained"
+        style={{ float: "left" }}
+        type="button"
+      >
+        ADD ENTRY
+      </Button>
     </div>
   );
 }

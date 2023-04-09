@@ -10,15 +10,6 @@ export enum Gender {
   Other = "other",
 }
 
-// export interface Patient {
-//   id: string;
-//   name: string;
-//   occupation: string;
-//   gender: Gender;
-//   ssn?: string;
-//   dateOfBirth?: string;
-// }
-
 interface BaseEntry {
   id: string;
   description: string;
@@ -28,18 +19,18 @@ interface BaseEntry {
 }
 
 export enum HealthCheckRating {
-  "Healthy" = 0,
-  "LowRisk" = 1,
-  "HighRisk" = 2,
-  "CriticalRisk" = 3,
+  Healthy = 0,
+  LowRisk = 1,
+  HighRisk = 2,
+  CriticalRisk = 3,
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
 
-interface sickLeave {
+export interface sickLeave {
   startDate: string;
   endDate: string;
 }
