@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { healthCheckRatingOptions, AddEntryFormProps } from "./entryTypes";
 import { HealthCheckEntry } from "../../types";
+import patientServices from "./../../services/patients";
 
 const HealthCheckForm = ({
   id,
@@ -43,11 +44,18 @@ const HealthCheckForm = ({
       diagnosisCodes: diagnosisCodes.split(","),
     };
 
-    console.log(data);
-
-    setSelectedValue("");
-    clearForm();
-    closeForm();
+    try {
+      patientServices.addEntry(id, data);
+      setSelectedValue("");
+      clearForm();
+      closeForm();
+    } catch (error) {
+      let errMsg = "Something occured, ";
+      if (error instanceof Error) {
+        errMsg += error.message;
+      }
+      console.log(errMsg);
+    }
   };
 
   return (

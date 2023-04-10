@@ -2,6 +2,7 @@ import React from "react";
 import { TextField, InputLabel, Button, Box } from "@mui/material";
 import { AddEntryFormProps } from "./entryTypes";
 import { OccupationalHealthcareEntry } from "../../types";
+import patientServices from "./../../services/patients";
 
 const OccupationalHealthcareForm = ({
   id,
@@ -39,11 +40,18 @@ const OccupationalHealthcareForm = ({
       sickLeave: { startDate, endDate },
     };
 
-    console.log(data);
-
-    setSelectedValue("");
-    clearForm();
-    closeForm();
+    try {
+      patientServices.addEntry(id, data);
+      setSelectedValue("");
+      clearForm();
+      closeForm();
+    } catch (error) {
+      let errMsg = "Something occured, ";
+      if (error instanceof Error) {
+        errMsg += error.message;
+      }
+      console.log(errMsg);
+    }
   };
 
   return (
