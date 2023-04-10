@@ -41,3 +41,10 @@ export const healthCheckRatingOptions: HealthCheckRatingOptionType[] =
       label: v,
       value: idx,
     }));
+
+export type AddEntryFormProps = {
+  id: string;
+  selectedValue: string,
+  setSelectedValue: React.Dispatch<React.SetStateAction<string>>;
+  setOpenForm: React.Dispatch<React.SetStateAction<boolean>>;
+};

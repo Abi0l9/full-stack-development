@@ -1,24 +1,18 @@
 import React from "react";
-import {
-  TextField,
-  InputLabel,
-  MenuItem,
-  Select,
-  Button,
-  Box,
-} from "@mui/material";
-import { healthCheckRatingOptions, AddEntryFormProps } from "./entryTypes";
-import { HealthCheckEntry } from "../../types";
+import { TextField, InputLabel, Button, Box } from "@mui/material";
+import { AddEntryFormProps } from "./entryTypes";
+import { HospitalEntry } from "../../types";
 
-const HealthCheckForm = ({
+const HospitalForm = ({
   id,
   setSelectedValue,
   setOpenForm,
 }: AddEntryFormProps) => {
   const [date, setDate] = React.useState("");
   const [specialist, setSpecialist] = React.useState("");
-  const [healthCheckRating, setHealthCheckRating] = React.useState(0);
   const [description, setDescription] = React.useState("");
+  const [dischargeDate, setDischargeDate] = React.useState("");
+  const [criteria, setCriteria] = React.useState("");
   const [diagnosisCodes, setDiagnosisCodes] = React.useState("");
 
   const clearForm = () => {
@@ -33,14 +27,14 @@ const HealthCheckForm = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data: HealthCheckEntry = {
+    const data: HospitalEntry = {
       id,
       date,
       specialist,
-      type: "HealthCheck",
+      type: "Hospital",
       description,
-      healthCheckRating,
       diagnosisCodes: diagnosisCodes.split(","),
+      discharge: { date: dischargeDate, criteria },
     };
 
     console.log(data);
@@ -74,23 +68,7 @@ const HealthCheckForm = ({
               setSpecialist(e.target.value)
             }
           />
-          <InputLabel style={{ marginTop: 20 }}>Health Check Rating</InputLabel>
-          <Select
-            label="healthCheckRating"
-            fullWidth
-            name="healthCheckRating"
-            value={healthCheckRating}
-            onChange={(e) =>
-              typeof e.target.value === "number" &&
-              setHealthCheckRating(e.target.value)
-            }
-          >
-            {healthCheckRatingOptions.map((option) => (
-              <MenuItem key={option.label} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
+
           <TextField
             name="description"
             type="text"
@@ -113,6 +91,33 @@ const HealthCheckForm = ({
               setDiagnosisCodes(e.target.value)
             }
           />
+          <InputLabel style={{ marginTop: 20 }}>Discharge Details</InputLabel>
+          <Box
+            sx={{
+              marginTop: "4px",
+            }}
+          >
+            <TextField
+              type="date"
+              name="dischargeDate"
+              variant="standard"
+              onChange={(e) =>
+                typeof e.target.value === "string" &&
+                setDischargeDate(e.target.value)
+              }
+            />
+            <TextField
+              type="text"
+              fullWidth
+              name="Criteria"
+              label="Criteria"
+              variant="standard"
+              onChange={(e) =>
+                typeof e.target.value === "string" &&
+                setCriteria(e.target.value)
+              }
+            />
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -139,4 +144,4 @@ const HealthCheckForm = ({
   );
 };
 
-export default HealthCheckForm;
+export default HospitalForm;
