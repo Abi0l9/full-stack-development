@@ -2,3 +2,5 @@ node_modules
 build
 .eslintrc.js
 src/index.js
+*.test.js
+*.config.js

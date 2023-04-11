@@ -5,8 +5,13 @@ import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
 import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeBlogs } from "./reducers/blog";
 
 const App = () => {
+  const blog = useSelector((state) => state.blogs);
+  const dispatch = useDispatch();
+  console.log(blog);
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState("");
   const [notification, setNotification] = useState({
@@ -22,11 +27,8 @@ const App = () => {
       newBlogObj.id = blog.id;
 
       setBlogs(blogs.concat(newBlogObj));
-      // setBlogs([...blogs]);
 
       blogFormRef.current.toggleVisibility();
-
-      // console.log(blog);
 
       clearNotification();
       setNotification({
@@ -86,6 +88,7 @@ const App = () => {
         await blogService.deleteBlog(blogId);
         blogs.splice(blogIdx, 1);
         setBlogs([...blogs]);
+
         setNotification({ message: "Deleted successfully!", type: "success" });
         clearNotification();
       } catch (error) {
@@ -98,6 +101,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
+
+    dispatch(initializeBlogs());
   }, []);
 
   useEffect(() => {

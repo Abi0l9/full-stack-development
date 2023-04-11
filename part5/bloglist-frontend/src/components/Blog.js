@@ -22,10 +22,10 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
 
   useEffect(() => {
     setLikes(Number(likesRef.current.textContent));
-    if (username !== blog.user?.username) {
+    if (username !== blog.user.username) {
       removeBtnRef.current.hidden = "true";
     }
-  }, [username, blog.user?.username]);
+  }, [username, blog.user.username]);
 
   const toggleView = () => {
     if (display) {
