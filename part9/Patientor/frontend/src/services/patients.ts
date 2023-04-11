@@ -14,7 +14,6 @@ const addEntry = async (id: string, object: Entry) => {
     `${apiBaseUrl}/patients/${id}/entries`,
     object
   );
-
   return data;
 };
 

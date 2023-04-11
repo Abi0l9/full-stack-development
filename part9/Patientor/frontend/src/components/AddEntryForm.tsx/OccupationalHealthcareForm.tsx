@@ -1,8 +1,10 @@
 import React from "react";
-import { TextField, InputLabel, Button, Box } from "@mui/material";
+import { TextField, InputLabel, Button, Box, Typography, Select, MenuItem } from "@mui/material";
 import { AddEntryFormProps } from "./entryTypes";
 import { OccupationalHealthcareEntry } from "../../types";
 import patientServices from "./../../services/patients";
+import { diagnosisList } from "./../../utils";
+
 
 const OccupationalHealthcareForm = ({
   id,
@@ -16,7 +18,17 @@ const OccupationalHealthcareForm = ({
   const [endDate, setEndDate] = React.useState("");
   const [diagnosisCodes, setDiagnosisCodes] = React.useState("");
   const [employerName, setEmployerName] = React.useState("");
+  const [diagnosisCode, setDiagnosisCode] = React.useState("");
+  const [diagnosisLists, setDiagnosisLists] = React.useState<string[]>([]);
 
+  React.useEffect(() => {
+    const getCodes = async () => {
+      const request = await diagnosisList();
+      setDiagnosisLists(request);
+    };
+
+    void getCodes();
+  });
   const clearForm = () => {
     (document.getElementById("form") as HTMLFormElement).reset();
   };
@@ -36,7 +48,7 @@ const OccupationalHealthcareForm = ({
       type: "OccupationalHealthcare",
       description,
       employerName,
-      diagnosisCodes: diagnosisCodes.split(","),
+      diagnosisCodes: Array(diagnosisCode),
       sickLeave: { startDate, endDate },
     };
 
@@ -57,6 +69,7 @@ const OccupationalHealthcareForm = ({
   return (
     <div>
       <Box sx={{ border: 1, marginBottom: "5px", p: 5 }}>
+        <Typography variant="h6">New Occupational Entry</Typography>
         <form onSubmit={handleSubmit} id="form">
           <TextField
             type="date"
@@ -66,6 +79,7 @@ const OccupationalHealthcareForm = ({
             onChange={(e) =>
               typeof e.target.value === "string" && setDate(e.target.value)
             }
+            required
           />
           <TextField
             name="specialist"
@@ -77,6 +91,7 @@ const OccupationalHealthcareForm = ({
               typeof e.target.value === "string" &&
               setSpecialist(e.target.value)
             }
+            required
           />
 
           <TextField
@@ -89,18 +104,26 @@ const OccupationalHealthcareForm = ({
               typeof e.target.value === "string" &&
               setDescription(e.target.value)
             }
+            required
           />
-          <TextField
-            name="diagnosisCodes"
-            type="text"
-            label="Diagnosis Codes"
+          <InputLabel style={{ marginTop: 20 }}>Diagnosis Code</InputLabel>
+          <Select
+            label="Diagnosis Code"
             fullWidth
-            variant="standard"
+            name="diagnosisCode"
+            value={diagnosisCode}
+            placeholder="Select diagnosis code"
             onChange={(e) =>
               typeof e.target.value === "string" &&
-              setDiagnosisCodes(e.target.value)
+              setDiagnosisCode(e.target.value)
             }
-          />
+          >
+            {diagnosisLists.map((diagCode) => (
+              <MenuItem key={diagCode} value={diagCode}>
+                {diagCode}
+              </MenuItem>
+            ))}
+          </Select>
           <TextField
             name="employerName"
             type="text"
@@ -111,8 +134,9 @@ const OccupationalHealthcareForm = ({
               typeof e.target.value === "string" &&
               setEmployerName(e.target.value)
             }
+            required
           />
-          <InputLabel style={{ marginTop: 20 }}>Discharge Details</InputLabel>
+          <InputLabel style={{ marginTop: 20 }}>Sick Leave</InputLabel>
           <Box
             sx={{
               display: "flex",

@@ -93,10 +93,6 @@ function PatientPage({ patientDetails }: Props) {
   const formDisplay = { display: openForm ? "" : "none" };
   const btnDisplay = { display: openForm ? "none" : "" };
 
-  const handleFormDisplay = () => {
-    setOpenForm(!openForm);
-  };
-
   const handleModalDisplay = () => {
     setmodalState(!modalState);
   };
