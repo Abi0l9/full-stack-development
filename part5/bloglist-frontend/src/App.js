@@ -7,9 +7,10 @@ import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blog";
+import { newNotification } from "./reducers/notification";
 
 const App = () => {
-  const blog = useSelector((state) => state.blogs);
+  const blog = useSelector((state) => state);
   const dispatch = useDispatch();
   console.log(blog);
   const [blogs, setBlogs] = useState([]);
@@ -30,38 +31,40 @@ const App = () => {
 
       blogFormRef.current.toggleVisibility();
 
-      clearNotification();
-      setNotification({
-        message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
-        type: "success",
-      });
+      dispatch(
+        newNotification(
+          {
+            message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
+            type: "success",
+          },
+          3000
+        )
+      );
     } catch (error) {
-      clearNotification();
-      console.log(error.message);
-      setNotification({
-        message: "Some fields are missing or Invalid Input",
-        type: "error",
-      });
+      dispatch(
+        newNotification(
+          {
+            message: "Some fields are missing or Invalid Input",
+            type: "error",
+          },
+          3000
+        )
+      );
     }
-  };
-
-  const clearNotification = () => {
-    setTimeout(() => {
-      setNotification({
-        message: "",
-        type: "",
-      });
-    }, 5000);
   };
 
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("user");
-    clearNotification();
-    setNotification({
-      message: `${user.name} logged out, successfully!`,
-      type: "success",
-    });
+    dispatch(
+      newNotification(
+        {
+          message: `${user.name} logged out, successfully!`,
+          type: "success",
+        },
+        3000
+      )
+    );
   };
 
   const updateLikesField = async (blog, likesPatchObj, likesRef) => {
@@ -89,12 +92,26 @@ const App = () => {
         blogs.splice(blogIdx, 1);
         setBlogs([...blogs]);
 
-        setNotification({ message: "Deleted successfully!", type: "success" });
-        clearNotification();
+        dispatch(
+          newNotification(
+            {
+              message: "Deleted successfully!",
+              type: "success",
+            },
+            3000
+          )
+        );
       } catch (error) {
         console.log(error.message);
-        setNotification({ message: "Oops...an error occurred", type: "error" });
-        clearNotification();
+        dispatch(
+          newNotification(
+            {
+              message: "Oops...an error occurred",
+              type: "error",
+            },
+            3000
+          )
+        );
       }
     }
   };
@@ -120,24 +137,14 @@ const App = () => {
         <div>
           <h1>Login into the application</h1>
 
-          <Notification
-            message={notification.message}
-            type={notification.type}
-          />
+          <Notification />
           <br />
-          <LoginForm
-            setNotification={setNotification}
-            clearNotification={clearNotification}
-            setUser={setUser}
-          />
+          <LoginForm setNotification={setNotification} setUser={setUser} />
         </div>
       ) : (
         <div>
           <h2>blogs</h2>
-          <Notification
-            message={notification.message}
-            type={notification.type}
-          />
+          <Notification />
           <br />
           <div>
             <strong>{user.name}</strong> logged in!

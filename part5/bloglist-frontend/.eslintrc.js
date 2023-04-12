@@ -20,6 +20,7 @@ module.exports = {
     "linebreak-style": 0,
     quotes: ["error", "double"],
     semi: ["error", "always"],
+    "no-unused-vars": "off",
     eqeqeq: "error",
     "no-trailing-spaces": "error",
     "object-curly-spacing": ["error", "always"],

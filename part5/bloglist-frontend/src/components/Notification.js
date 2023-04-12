@@ -1,4 +1,7 @@
-const Notification = ({ type, message }) => {
+import { useSelector } from "react-redux";
+
+const Notification = () => {
+  const { message, type } = useSelector((store) => store.notification);
   const success = {
     position: "absolute",
     top: "3rem",
