@@ -12,13 +12,8 @@ import { newNotification } from "./reducers/notification";
 const App = () => {
   const blog = useSelector((state) => state);
   const dispatch = useDispatch();
-  console.log(blog);
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState("");
-  const [notification, setNotification] = useState({
-    message: "",
-    type: "",
-  });
 
   const blogFormRef = useRef();
 
@@ -32,23 +27,17 @@ const App = () => {
       blogFormRef.current.toggleVisibility();
 
       dispatch(
-        newNotification(
-          {
-            message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
-            type: "success",
-          },
-          3000
-        )
+        newNotification({
+          message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
+          type: "success",
+        })
       );
     } catch (error) {
       dispatch(
-        newNotification(
-          {
-            message: "Some fields are missing or Invalid Input",
-            type: "error",
-          },
-          3000
-        )
+        newNotification({
+          message: "Some fields are missing or Invalid Input",
+          type: "error",
+        })
       );
     }
   };
@@ -57,13 +46,10 @@ const App = () => {
     setUser(null);
     window.localStorage.removeItem("user");
     dispatch(
-      newNotification(
-        {
-          message: `${user.name} logged out, successfully!`,
-          type: "success",
-        },
-        3000
-      )
+      newNotification({
+        message: `${user.name} logged out, successfully!`,
+        type: "success",
+      })
     );
   };
 
@@ -93,24 +79,18 @@ const App = () => {
         setBlogs([...blogs]);
 
         dispatch(
-          newNotification(
-            {
-              message: "Deleted successfully!",
-              type: "success",
-            },
-            3000
-          )
+          newNotification({
+            message: "Deleted successfully!",
+            type: "success",
+          })
         );
       } catch (error) {
         console.log(error.message);
         dispatch(
-          newNotification(
-            {
-              message: "Oops...an error occurred",
-              type: "error",
-            },
-            3000
-          )
+          newNotification({
+            message: "Oops...an error occurred",
+            type: "error",
+          })
         );
       }
     }
@@ -139,7 +119,7 @@ const App = () => {
 
           <Notification />
           <br />
-          <LoginForm setNotification={setNotification} setUser={setUser} />
+          <LoginForm setUser={setUser} />
         </div>
       ) : (
         <div>

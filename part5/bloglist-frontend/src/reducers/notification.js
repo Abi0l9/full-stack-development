@@ -19,7 +19,7 @@ const notificationSlice = createSlice({
 
 export const { setNotification, clearNotification } = notificationSlice.actions;
 
-export const newNotification = (content, time) => {
+export const newNotification = (content, time = 4000) => {
   return (dispatch) => {
     dispatch(setNotification(content));
 

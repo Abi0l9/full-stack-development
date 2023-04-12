@@ -1,8 +1,11 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 import PropTypes from "prop-types";
+import { newNotification } from "../reducers/notification";
+import { useDispatch } from "react-redux";
 
-const LoginForm = ({ setNotification, clearNotification, setUser }) => {
+const LoginForm = ({ setUser }) => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,26 +23,29 @@ const LoginForm = ({ setNotification, clearNotification, setUser }) => {
       setUser(response.data);
       blogService.setToken(response.data.token);
 
-      setNotification({
-        message: `${response.data.name} logged in successfully!`,
-        type: "success",
-      });
-      clearNotification();
+      dispatch(
+        newNotification({
+          message: `${response.data.name} logged in successfully!`,
+          type: "success",
+        })
+      );
     } catch (error) {
       if (error.message === "Request failed with status code 401") {
-        setNotification({
-          message: "Invalid Username/Password",
-          type: "error",
-        });
-        clearNotification();
+        dispatch(
+          newNotification({
+            message: "Invalid Username/Password",
+            type: "error",
+          })
+        );
       }
       if (error.message === "Request failed with status code 500") {
-        setNotification({
-          message:
-            "Connection to the server failed. Please, make sure you have an active internet connection.",
-          type: "error",
-        });
-        clearNotification();
+        dispatch(
+          newNotification({
+            message:
+              "Connection to the server failed. Please, make sure you have an active internet connection.",
+            type: "error",
+          })
+        );
       }
     }
   };
@@ -77,7 +83,6 @@ const LoginForm = ({ setNotification, clearNotification, setUser }) => {
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
