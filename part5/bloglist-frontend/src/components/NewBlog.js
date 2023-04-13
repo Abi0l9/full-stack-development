@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "../reducers/blog";
 import { newNotification } from "../reducers/notification";
 
 const NewBlog = ({ blogFormRef }) => {
+  const blogs = useSelector((store) => store.blogs);
   const dispatch = useDispatch();
+
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [likes, setLikes] = useState("");
@@ -34,7 +36,7 @@ const NewBlog = ({ blogFormRef }) => {
     e.preventDefault();
 
     try {
-      await dispatch(createBlog(newBlogObj));
+      await dispatch(createBlog(newBlogObj, blogs));
       clearInputFields();
 
       blogFormRef.current.toggleVisibility();

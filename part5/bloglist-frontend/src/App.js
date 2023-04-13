@@ -6,7 +6,7 @@ import Notification from "./components/Notification";
 import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
 import { useDispatch, useSelector } from "react-redux";
-import { initializeBlogs, updateLikes } from "./reducers/blog";
+import { initializeBlogs, removeBlog, updateLikes } from "./reducers/blog";
 import { newNotification } from "./reducers/notification";
 import { removeUserData } from "./reducers/user";
 
@@ -44,16 +44,12 @@ const App = () => {
     }
   };
 
-  const deleteSingleBlog = async (blog) => {
-    const blogId = blog.id;
-    const blogIdx = blogs.findIndex((blog) => blog.id === blogId);
-    const message = `Remove blog ${blog.title} by ${blog.author}`;
+  const deleteSingleBlog = async (selectedBlog) => {
+    const message = `Remove blog ${selectedBlog.title} by ${selectedBlog.author}`;
 
     if (window.confirm(message)) {
       try {
-        await blogService.deleteBlog(blogId);
-        blogs.splice(blogIdx, 1);
-        // setBlogs([...blogs]);
+        dispatch(removeBlog(selectedBlog, blogs));
 
         dispatch(
           newNotification({
