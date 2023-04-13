@@ -6,62 +6,39 @@ import Notification from "./components/Notification";
 import Toggable from "./components/Toggable";
 import blogService from "./services/blogs";
 import { useDispatch, useSelector } from "react-redux";
-import { initializeBlogs } from "./reducers/blog";
+import { initializeBlogs, updateLikes } from "./reducers/blog";
 import { newNotification } from "./reducers/notification";
+import { removeUserData } from "./reducers/user";
 
 const App = () => {
-  const blog = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState("");
-
+  const blogs = useSelector((state) => state.blogs);
+  const loggedInUser = useSelector((state) => state.user);
+  const [user, setUser] = useState({});
   const blogFormRef = useRef();
 
-  const handleBlogSubmit = async (newBlogObj) => {
-    try {
-      const blog = await blogService.addBlog(newBlogObj);
-      newBlogObj.id = blog.id;
-
-      setBlogs(blogs.concat(newBlogObj));
-
-      blogFormRef.current.toggleVisibility();
-
-      dispatch(
-        newNotification({
-          message: `A new blog ${newBlogObj.title} by ${newBlogObj.author} has been added`,
-          type: "success",
-        })
-      );
-    } catch (error) {
-      dispatch(
-        newNotification({
-          message: "Some fields are missing or Invalid Input",
-          type: "error",
-        })
-      );
+  useEffect(() => {
+    if (loggedInUser) {
+      setUser(loggedInUser);
     }
-  };
+  });
 
   const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem("user");
+    dispatch(removeUserData());
+
     dispatch(
       newNotification({
         message: `${user.name} logged out, successfully!`,
         type: "success",
       })
     );
+
+    setUser("");
   };
 
-  const updateLikesField = async (blog, likesPatchObj, likesRef) => {
-    const blogId = blog.id;
+  const updateLikesField = async (selectedBlog) => {
     try {
-      likesPatchObj.likes += 1;
-      const newObj = { likes: String(likesPatchObj.likes) };
-      likesRef.current.textContent = newObj.likes;
-
-      await blogService.updateLikes(blogId, newObj);
-      //update likes field immediately
+      dispatch(updateLikes(selectedBlog, blogs));
     } catch (error) {
       console.log(error.message);
     }
@@ -76,7 +53,7 @@ const App = () => {
       try {
         await blogService.deleteBlog(blogId);
         blogs.splice(blogIdx, 1);
-        setBlogs([...blogs]);
+        // setBlogs([...blogs]);
 
         dispatch(
           newNotification({
@@ -97,29 +74,26 @@ const App = () => {
   };
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-
     dispatch(initializeBlogs());
   }, []);
-
   useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem("user");
-    if (loggedUserJson) {
-      const user = JSON.parse(loggedUserJson);
-      setUser(user);
-      blogService.setToken(user.token);
+    let storage = localStorage.user;
+    if (storage) {
+      const data = JSON.parse(storage);
+      setUser(data);
+      blogService.setToken(data.token);
     }
   }, []);
 
   return (
     <div>
-      {!user ? (
+      {!user.name ? (
         <div>
           <h1>Login into the application</h1>
 
           <Notification />
           <br />
-          <LoginForm setUser={setUser} />
+          <LoginForm />
         </div>
       ) : (
         <div>
@@ -132,24 +106,20 @@ const App = () => {
           </div>
           <div>
             <Toggable buttonText="Add blog" ref={blogFormRef}>
-              <NewBlog handleBlogSubmit={handleBlogSubmit} />
+              <NewBlog blogFormRef={blogFormRef} />
             </Toggable>
           </div>
           <br />
           <div>
-            {blogs
-              .sort(
-                (first, second) => Number(second.likes) - Number(first.likes)
-              )
-              .map((blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  updateLikesField={updateLikesField}
-                  deleteSingleBlog={deleteSingleBlog}
-                  user={user}
-                />
-              ))}
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateLikesField={updateLikesField}
+                deleteSingleBlog={deleteSingleBlog}
+                user={user}
+              />
+            ))}
           </div>
         </div>
       )}

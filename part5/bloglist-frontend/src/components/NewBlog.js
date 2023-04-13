@@ -1,5 +1,10 @@
 import { useState } from "react";
-const NewBlog = ({ handleBlogSubmit }) => {
+import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blog";
+import { newNotification } from "../reducers/notification";
+
+const NewBlog = ({ blogFormRef }) => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [likes, setLikes] = useState("");
@@ -24,10 +29,30 @@ const NewBlog = ({ handleBlogSubmit }) => {
   };
 
   const newBlogObj = { title, author, likes, url };
-  const addNewBlog = (e) => {
+
+  const addNewBlog = async (e) => {
     e.preventDefault();
-    handleBlogSubmit(newBlogObj);
-    clearInputFields();
+
+    try {
+      await dispatch(createBlog(newBlogObj));
+      clearInputFields();
+
+      blogFormRef.current.toggleVisibility();
+
+      dispatch(
+        newNotification({
+          message: `A new blog ${newBlogObj.title} byyy ${newBlogObj.author} has been added`,
+          type: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        newNotification({
+          message: "Some fields are missing or Invalid Input",
+          type: "error",
+        })
+      );
+    }
   };
 
   return (

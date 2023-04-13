@@ -6,10 +6,9 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
 
   const toggleBlog = { display: display ? "" : "none" };
   const titleColor = { backgroundColor: display ? "yellow" : "" };
+
   const buttonRef = useRef(null);
-  const likesRef = useRef(null);
   const removeBtnRef = useRef(null);
-  let [likes, setLikes] = useState(null);
   const { username } = user;
 
   const style = {
@@ -21,7 +20,6 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
   };
 
   useEffect(() => {
-    setLikes(Number(likesRef.current.textContent));
     if (username !== blog?.user?.username) {
       removeBtnRef.current.hidden = "true";
     }
@@ -35,8 +33,6 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
     }
     setDisplay(!display);
   };
-
-  const likesPatchObj = { likes: likes };
 
   return (
     <div style={style}>
@@ -55,11 +51,8 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
         <p>Url: {blog.url}</p>
         <div>
           <p>
-            likes: <span ref={likesRef}>{blog.likes}</span>{" "}
-            <button
-              onClick={() => updateLikesField(blog, likesPatchObj, likesRef)}
-              id="likeBtn"
-            >
+            likes: <span>{blog.likes}</span>{" "}
+            <button onClick={() => updateLikesField(blog)} id="likeBtn">
               like blog
             </button>
           </p>
