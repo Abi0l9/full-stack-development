@@ -2,8 +2,19 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "../reducers/blog";
 import { newNotification } from "../reducers/notification";
+import { useMutation, useQueryClient } from "react-query";
+import blogServices from "../services/blogs";
+import { blogSorter } from "../utils";
 
 const NewBlog = ({ blogFormRef }) => {
+  const queryClient = useQueryClient();
+  const newBlogMutation = useMutation(blogServices.addBlog, {
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData("blogs");
+      queryClient.setQueryData("blogs", blogSorter(blogs.concat(newBlog)));
+    },
+  });
+
   const blogs = useSelector((store) => store.blogs);
   const dispatch = useDispatch();
 
@@ -36,7 +47,8 @@ const NewBlog = ({ blogFormRef }) => {
     e.preventDefault();
 
     try {
-      await dispatch(createBlog(newBlogObj, blogs));
+      // await dispatch(createBlog(newBlogObj, blogs));
+      newBlogMutation.mutate(newBlogObj);
       clearInputFields();
 
       blogFormRef.current.toggleVisibility();

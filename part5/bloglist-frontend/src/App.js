@@ -1,21 +1,24 @@
-import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import LoginForm from "./components/Login";
-import NewBlog from "./components/NewBlog";
-import Notification from "./components/Notification";
-import Toggable from "./components/Toggable";
+import { useState, useEffect } from "react";
+import LoginView from "./components/LoginView";
 import blogService from "./services/blogs";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs, removeBlog, updateLikes } from "./reducers/blog";
 import { newNotification } from "./reducers/notification";
 import { removeUserData } from "./reducers/user";
+import { useQuery } from "react-query";
+import { Route, Routes } from "react-router-dom";
+import UsersList from "./components/UserView/UsersList";
+import Home from "./components/Home";
 
 const App = () => {
+  const { data: blogsQ } = useQuery("blogs", blogService.getAll, {
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs);
   const loggedInUser = useSelector((state) => state.user);
   const [user, setUser] = useState({});
-  const blogFormRef = useRef();
 
   useEffect(() => {
     if (loggedInUser) {
@@ -83,42 +86,26 @@ const App = () => {
 
   return (
     <div>
-      {!user.name ? (
-        <div>
-          <h1>Login into the application</h1>
-
-          <Notification />
-          <br />
-          <LoginForm />
-        </div>
-      ) : (
-        <div>
-          <h2>blogs</h2>
-          <Notification />
-          <br />
-          <div>
-            <strong>{user.name}</strong> logged in!
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-          <div>
-            <Toggable buttonText="Add blog" ref={blogFormRef}>
-              <NewBlog blogFormRef={blogFormRef} />
-            </Toggable>
-          </div>
-          <br />
-          <div>
-            {blogs.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                updateLikesField={updateLikesField}
-                deleteSingleBlog={deleteSingleBlog}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            !user.name ? (
+              <LoginView />
+            ) : (
+              <Home
                 user={user}
+                handleLogout={handleLogout}
+                deleteSingleBlog={deleteSingleBlog}
+                updateLikesField={updateLikesField}
               />
-            ))}
-          </div>
-        </div>
-      )}
+            )
+          }
+        />
+        <Route path="/blogs" />
+        <Route path="/users" element={<UsersList />} />
+        <Route path="/users/:id" />
+      </Routes>
     </div>
   );
 };
