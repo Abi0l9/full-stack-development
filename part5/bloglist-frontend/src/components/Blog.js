@@ -1,53 +1,54 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
-  const [display, setDisplay] = useState(false);
+const Blog = ({ blog /*, updateLikesField, deleteSingleBlog, user*/ }) => {
+  // const [display, setDisplay] = useState(false);
 
-  const toggleBlog = { display: display ? "" : "none" };
-  const titleColor = { backgroundColor: display ? "yellow" : "" };
+  // const toggleBlog = { display: display ? "" : "none" };
+  // const titleColor = { backgroundColor: display ? "yellow" : "" };
 
-  const buttonRef = useRef(null);
-  const removeBtnRef = useRef(null);
-  const { username } = user;
+  // const buttonRef = useRef(null);
+  // const removeBtnRef = useRef(null);
+  // const { username } = user;
 
   const style = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    paddingTop: 1,
+    paddingLeft: 1,
     border: "solid",
     borderWidth: 1,
-    marginBottom: 5,
+    marginBottom: 1,
   };
 
-  useEffect(() => {
-    if (username !== blog?.user?.username) {
-      removeBtnRef.current.hidden = "true";
-    }
-  }, [username, blog?.user?.username]);
+  // useEffect(() => {
+  //   if (username !== blog?.user?.username) {
+  //     removeBtnRef.current.hidden = "true";
+  //   }
+  // }, [username, blog?.user?.username]);
 
-  const toggleView = () => {
-    if (display) {
-      buttonRef.current.textContent = "view";
-    } else {
-      buttonRef.current.textContent = "hide";
-    }
-    setDisplay(!display);
-  };
+  // const toggleView = () => {
+  //   if (display) {
+  //     buttonRef.current.textContent = "view";
+  //   } else {
+  //     buttonRef.current.textContent = "hide";
+  //   }
+  //   setDisplay(!display);
+  // };
 
   return (
     <div style={style}>
       <div className="visibleArea">
         <p>
-          <span className="title" style={titleColor} onClick={toggleView}>
-            Title: {blog.title}
+          <span className="title">
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
           </span>
           {"  "}
-          <button ref={buttonRef} onClick={toggleView}>
+          {/* <button ref={buttonRef} onClick={toggleView}>
             view
-          </button>
+          </button> */}
         </p>
       </div>
-      <div style={toggleBlog} className="hiddenArea">
+      {/* <div style={toggleBlog} className="hiddenArea">
         <p>Url: {blog.url}</p>
         <div>
           <p>
@@ -61,7 +62,7 @@ const Blog = ({ blog, updateLikesField, deleteSingleBlog, user }) => {
         <button ref={removeBtnRef} onClick={() => deleteSingleBlog(blog)}>
           remove
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

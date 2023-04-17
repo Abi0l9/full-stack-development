@@ -11,6 +11,7 @@ import UsersList from "./components/UserView/UsersList";
 import Home from "./components/Home";
 import User from "./components/UserView/User";
 import LoggedInHeader from "./components/LoginView/LoggedInHeader";
+import SingleBlog from "./components/BlogView/SingleBlog";
 
 const App = () => {
   const { data: blogsQ } = useQuery("blogs", blogService.getAll, {
@@ -110,6 +111,10 @@ const App = () => {
           }
         />
         <Route path="/blogs" />
+        <Route
+          path="/blogs/:id"
+          element={<SingleBlog updateLikesField={updateLikesField} />}
+        />
         <Route path="/login" element={<LoginView />} />
         <Route
           path="/users"

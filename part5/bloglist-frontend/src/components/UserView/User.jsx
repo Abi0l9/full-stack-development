@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useMatch, useNavigate } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 
 const User = () => {
   const blogs = useSelector((state) => state.blogs);
@@ -19,7 +19,9 @@ const User = () => {
           <h4>added blogs</h4>
           {selectedUser.map((blog) => (
             <ul key={blog.id}>
-              <li>{blog.title}</li>
+              <li>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </li>
             </ul>
           ))}
         </div>

@@ -1,9 +1,5 @@
 import React from "react";
-import blogService from "../services/blogs";
-import { useDispatch, useSelector } from "react-redux";
-import { newNotification } from "../reducers/notification";
-import { removeBlog, updateLikes } from "../reducers/blog";
-import Notification from "./Notification";
+import { useSelector } from "react-redux";
 import NewBlog from "./NewBlog";
 import Toggable from "./Toggable";
 import Blog from "./Blog";
