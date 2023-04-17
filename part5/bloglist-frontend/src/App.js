@@ -6,9 +6,11 @@ import { initializeBlogs, removeBlog, updateLikes } from "./reducers/blog";
 import { newNotification } from "./reducers/notification";
 import { removeUserData } from "./reducers/user";
 import { useQuery } from "react-query";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import UsersList from "./components/UserView/UsersList";
 import Home from "./components/Home";
+import User from "./components/UserView/User";
+import LoggedInHeader from "./components/LoginView/LoggedInHeader";
 
 const App = () => {
   const { data: blogsQ } = useQuery("blogs", blogService.getAll, {
@@ -19,6 +21,7 @@ const App = () => {
   const blogs = useSelector((state) => state.blogs);
   const loggedInUser = useSelector((state) => state.user);
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (loggedInUser) {
@@ -37,6 +40,7 @@ const App = () => {
     );
 
     setUser("");
+    navigate("/");
   };
 
   const updateLikesField = async (selectedBlog) => {
@@ -86,6 +90,9 @@ const App = () => {
 
   return (
     <div>
+      {!user.name ? null : (
+        <LoggedInHeader user={user} handleLogout={handleLogout} />
+      )}
       <Routes>
         <Route
           path="/"
@@ -103,8 +110,21 @@ const App = () => {
           }
         />
         <Route path="/blogs" />
-        <Route path="/users" element={<UsersList />} />
-        <Route path="/users/:id" />
+        <Route path="/login" element={<LoginView />} />
+        <Route
+          path="/users"
+          element={
+            !user.name ? (
+              <LoginView />
+            ) : (
+              <UsersList user={user} handleLogout={handleLogout} />
+            )
+          }
+        />
+        <Route
+          path="/users/:id"
+          element={!user.name ? <LoginView /> : <User />}
+        />
       </Routes>
     </div>
   );
