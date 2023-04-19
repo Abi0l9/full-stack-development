@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useMatch } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 
 function SingleBlog({ updateLikesField }) {
   const blogs = useSelector((state) => state.blogs);
@@ -20,7 +20,11 @@ function SingleBlog({ updateLikesField }) {
         {selectedBlog.likes} likes{" "}
         <button onClick={() => updateLikesField(selectedBlog)}>like</button>{" "}
         <br />
-        added by {selectedBlog.user.name}
+        added by
+        <Link to={`/users/${selectedBlog.user.id}`}>
+          {" "}
+          {selectedBlog.user.name}
+        </Link>
       </p>
     </div>
   );

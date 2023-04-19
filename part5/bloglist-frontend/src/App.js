@@ -4,7 +4,7 @@ import blogService from "./services/blogs";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs, removeBlog, updateLikes } from "./reducers/blog";
 import { newNotification } from "./reducers/notification";
-import { removeUserData } from "./reducers/user";
+import { getUserData, removeUserData } from "./reducers/user";
 import { useQuery } from "react-query";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import UsersList from "./components/UserView/UsersList";
@@ -12,6 +12,7 @@ import Home from "./components/Home";
 import User from "./components/UserView/User";
 import LoggedInHeader from "./components/LoginView/LoggedInHeader";
 import SingleBlog from "./components/BlogView/SingleBlog";
+import Menu from "./components/Menu";
 
 const App = () => {
   const { data: blogsQ } = useQuery("blogs", blogService.getAll, {
@@ -85,15 +86,15 @@ const App = () => {
     if (storage) {
       const data = JSON.parse(storage);
       setUser(data);
+      dispatch(getUserData(data));
       blogService.setToken(data.token);
     }
   }, []);
 
   return (
     <div>
-      {!user.name ? null : (
-        <LoggedInHeader user={user} handleLogout={handleLogout} />
-      )}
+      <Menu setUser={setUser} />
+      {/* {!user.name ? null : <LoggedInHeader setUser={setUser} />} */}
       <Routes>
         <Route
           path="/"

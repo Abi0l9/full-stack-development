@@ -1,14 +1,47 @@
 import React from "react";
 import Notification from "../Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { newNotification } from "../../reducers/notification";
+import { removeUserData } from "../../reducers/user";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Button } from "@mui/material";
 
-function LoggedInHeader({ user, handleLogout }) {
+function LoggedInHeader({ setUser }) {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(removeUserData());
+
+    dispatch(
+      newNotification({
+        message: `${user.name} logged out, successfully!`,
+        type: "success",
+      })
+    );
+    setUser("");
+    navigate("/");
+  };
+
   return (
     <div>
-      <h1>Blogs</h1>
-      {user.name} logged in! <br />
-      <button onClick={handleLogout}>Logout</button>
-      <Notification />
-      <br />
+      {!user.name ? (
+        <Button color="inherit" component={Link} to="/">
+          Login
+        </Button>
+      ) : (
+        <LoggedInHeader setUser={setUser} />
+      )}
+
+      <Box sx={{ display: "flex" }}>
+        {user.name} logged in! <br />
+        <Button color="inherit" onClick={handleLogout}>
+          Logout
+        </Button>
+        <br />
+        <Notification />
+      </Box>
     </div>
   );
 }
