@@ -65,6 +65,21 @@ blogRouter.patch("/:blogId", async (request, response) => {
   }
 });
 
+blogRouter.post("/:blogId/comments", async (request, response) => {
+  const blogId = request.params.blogId;
+  const body = request.body;
+
+  const blog = await Blog.findById(blogId);
+
+  if (blog) {
+    blog.comments = blog.comments.concat(body);
+    await blog.save();
+    response.status(200).json(body).end();
+  } else {
+    return response.status(404).json({ message: "blog not found" }).end();
+  }
+});
+
 blogRouter.delete("/:blogId", userExtractor, async (request, response) => {
   const blogId = request.params.blogId;
   const user = request.user;
