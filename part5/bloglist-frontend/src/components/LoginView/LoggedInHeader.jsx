@@ -31,9 +31,6 @@ function LoggedInHeader({ setUser }) {
           Login
         </Button>
       ) : (
-        <LoggedInHeader setUser={setUser} />
-      )}
-
       <Box sx={{ display: "flex" }}>
         {user.name} logged in! <br />
         <Button color="inherit" onClick={handleLogout}>
@@ -42,6 +39,8 @@ function LoggedInHeader({ setUser }) {
         <br />
         <Notification />
       </Box>
+      )}
+
     </div>
   );
 }

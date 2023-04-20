@@ -21,6 +21,20 @@ const addBlog = async (newBlog) => {
   return request.data;
 };
 
+const addComment = async (blogId, newComment) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const request = await axios.post(
+    `${baseUrl}/${blogId}/comments`,
+    newComment,
+    config
+  );
+
+  return request.data;
+};
+
 const loginUser = (username, password) => {
   const request = axios.post("/api/login", { username, password });
   return request;
@@ -46,4 +60,5 @@ export default {
   setToken,
   deleteBlog,
   updateLikes,
+  addComment,
 };

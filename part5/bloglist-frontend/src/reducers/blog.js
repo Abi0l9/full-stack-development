@@ -18,10 +18,13 @@ const blogSlice = createSlice({
     deleteBlog(state, action) {
       return action.payload;
     },
+    addComment(state, action) {
+      return action.payload;
+    },
   },
 });
 
-export const { getBlogs, addBlog, incrementLikes, deleteBlog } =
+export const { getBlogs, addBlog, incrementLikes, deleteBlog, addComment } =
   blogSlice.actions;
 
 export const initializeBlogs = () => {
@@ -35,8 +38,29 @@ export const createBlog = (newBlog, blogs) => {
   return async (dispatch) => {
     const request = await blogServices.addBlog(newBlog);
 
-    const allBlogs = blogs.concat(newBlog);
-    dispatch(getBlogs(blogSorter(allBlogs)));
+    const allBlogs = blogSorter(blogs.concat(request));
+    dispatch(getBlogs(allBlogs));
+    // return request;
+  };
+};
+
+export const createComment = (newComment, blogId, blogs) => {
+  return async (dispatch) => {
+    const request = await blogServices.addComment(blogId, newComment);
+
+    const mappedBlogs = blogs.map((blog) => {
+      if (blog.id === blogId) {
+        const edit = {
+          ...blog,
+          comments: blog.comments.concat(request),
+        };
+        return edit;
+      }
+      return blog;
+    });
+
+    const allBlogs = blogSorter(mappedBlogs);
+    dispatch(addComment(allBlogs));
     return request;
   };
 };

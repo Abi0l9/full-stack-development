@@ -5,15 +5,16 @@ import { newNotification } from "../reducers/notification";
 import { useMutation, useQueryClient } from "react-query";
 import blogServices from "../services/blogs";
 import { blogSorter } from "../utils";
+import { Box, Button, TextField } from "@mui/material";
 
 const NewBlog = ({ blogFormRef }) => {
-  const queryClient = useQueryClient();
-  const newBlogMutation = useMutation(blogServices.addBlog, {
-    onSuccess: (newBlog) => {
-      const blogs = queryClient.getQueryData("blogs");
-      queryClient.setQueryData("blogs", blogSorter(blogs.concat(newBlog)));
-    },
-  });
+  // const queryClient = useQueryClient();
+  // const newBlogMutation = useMutation(blogServices.addBlog, {
+  //   onSuccess: (newBlog) => {
+  //     const blogs = queryClient.getQueryData("blogs");
+  //     queryClient.setQueryData("blogs", blogSorter(blogs.concat(newBlog)));
+  //   },
+  // });
 
   const blogs = useSelector((store) => store.blogs);
   const dispatch = useDispatch();
@@ -47,8 +48,8 @@ const NewBlog = ({ blogFormRef }) => {
     e.preventDefault();
 
     try {
-      // await dispatch(createBlog(newBlogObj, blogs));
-      newBlogMutation.mutate(newBlogObj);
+      dispatch(createBlog(newBlogObj, blogs));
+      // newBlogMutation.mutate(newBlogObj);
       clearInputFields();
 
       blogFormRef.current.toggleVisibility();
@@ -71,55 +72,85 @@ const NewBlog = ({ blogFormRef }) => {
 
   return (
     <div>
-      <h2>Add a new blog</h2>
       <form onSubmit={addNewBlog}>
-        <div className="testing">
-          title:
-          <input
-            name="title"
-            id="title"
-            data-testid="title"
-            value={title}
-            onChange={handleBlogInput}
-            placeholder="enter title of blog"
-          />
-        </div>
-        <div>
-          author:
-          <input
-            name="author"
-            id="author"
-            data-testid="author"
-            value={author}
-            onChange={handleBlogInput}
-            placeholder="enter author's name"
-          />
-        </div>
-        <div>
-          url:
-          <input
-            name="url"
-            data-testid="url"
-            id="url"
-            value={url}
-            onChange={handleBlogInput}
-            placeholder="https://..."
-          />
-        </div>
-        <div>
-          likes:
-          <input
-            name="likes"
-            id="likes"
-            data-testid="likes"
-            value={likes}
-            onChange={handleBlogInput}
-            placeholder="number of likes"
-          />
-        </div>
-        <button type="submit" id="create">
-          create
-        </button>
+        <Box className="testing" sx={{ margin: "0 auto", maxWidth: "70vw" }}>
+          <h2>Add a new blog</h2>
+          <Box>
+            <TextField
+              id="title"
+              name="title"
+              label="Blog Title"
+              value={title}
+              onChange={handleBlogInput}
+              variant="standard"
+              fullWidth
+              data-testid="title"
+              required
+            />
+          </Box>
+
+          <Box>
+            <TextField
+              id="url"
+              name="url"
+              label="Blog Url"
+              value={url}
+              onChange={handleBlogInput}
+              variant="standard"
+              data-testid="url"
+              fullWidth
+              required
+            />
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box>
+              <TextField
+                id="author"
+                name="author"
+                label="Blog Author"
+                value={author}
+                onChange={handleBlogInput}
+                variant="standard"
+                fullWidth
+                data-testid="author"
+                required
+              />
+            </Box>
+            <Box>
+              <TextField
+                id="likes"
+                name="likes"
+                label="Blog Likes"
+                value={likes}
+                onChange={handleBlogInput}
+                variant="standard"
+                data-testid="url"
+                fullWidth
+                required
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              marginTop: 2,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button type="submit" id="create" variant="contained">
+              Create
+            </Button>
+            <Button
+              onClick={() => blogFormRef.current.toggleVisibility()}
+              type="button"
+              id="cancel"
+              variant="outlined"
+              color="error"
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
       </form>
     </div>
   );

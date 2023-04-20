@@ -1,69 +1,27 @@
-import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Box, Link } from "@mui/material";
 
-const Blog = ({ blog /*, updateLikesField, deleteSingleBlog, user*/ }) => {
-  // const [display, setDisplay] = useState(false);
-
-  // const toggleBlog = { display: display ? "" : "none" };
-  // const titleColor = { backgroundColor: display ? "yellow" : "" };
-
-  // const buttonRef = useRef(null);
-  // const removeBtnRef = useRef(null);
-  // const { username } = user;
-
+const Blog = ({ blog }) => {
   const style = {
     paddingTop: 1,
     paddingLeft: 1,
-    border: "solid",
-    borderWidth: 1,
     marginBottom: 1,
   };
 
-  // useEffect(() => {
-  //   if (username !== blog?.user?.username) {
-  //     removeBtnRef.current.hidden = "true";
-  //   }
-  // }, [username, blog?.user?.username]);
-
-  // const toggleView = () => {
-  //   if (display) {
-  //     buttonRef.current.textContent = "view";
-  //   } else {
-  //     buttonRef.current.textContent = "hide";
-  //   }
-  //   setDisplay(!display);
-  // };
-
   return (
-    <div style={style}>
-      <div className="visibleArea">
-        <p>
-          <span className="title">
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </span>
-          {"  "}
-          {/* <button ref={buttonRef} onClick={toggleView}>
-            view
-          </button> */}
-        </p>
-      </div>
-      {/* <div style={toggleBlog} className="hiddenArea">
-        <p>Url: {blog.url}</p>
-        <div>
-          <p>
-            likes: <span>{blog.likes}</span>{" "}
-            <button onClick={() => updateLikesField(blog)} id="likeBtn">
-              like blog
-            </button>
-          </p>
-        </div>
-        <p>Author: {blog.author}</p>
-        <button ref={removeBtnRef} onClick={() => deleteSingleBlog(blog)}>
-          remove
-        </button>
-      </div> */}
-    </div>
+    <Box
+      sx={{
+        padding: "10px",
+        marginBottom: 1,
+        backgroundColor: "lightgrey",
+      }}
+    >
+      <span className="title">
+        <Link underline="hover" color="black" href={`/blogs/${blog.id}`}>
+          {blog.title}
+        </Link>
+      </span>
+    </Box>
   );
 };
 

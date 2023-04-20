@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import NewBlog from "./NewBlog";
 import Toggable from "./Toggable";
 import Blog from "./Blog";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 function Home({ user, deleteSingleBlog, updateLikesField }) {
   const blogs = useSelector((state) => state.blogs);
@@ -11,15 +11,15 @@ function Home({ user, deleteSingleBlog, updateLikesField }) {
 
   return (
     <div>
-      <div>
-        <Typography variant="h3">Blog app</Typography>
+      <Box sx={{}}>
+        <Typography variant="h4">Blog app</Typography>
         <Toggable buttonText="Add blog" ref={blogFormRef}>
           <NewBlog blogFormRef={blogFormRef} />
         </Toggable>
-      </div>
+      </Box>
       <br />
       <div>
-        {blogs?.map((blog) => (
+        {blogs.map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}

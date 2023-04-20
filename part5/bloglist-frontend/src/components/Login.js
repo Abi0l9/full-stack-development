@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import blogService from "../services/blogs";
 import { newNotification } from "../reducers/notification";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "../reducers/user";
+import { Box, Button, TextField } from "@mui/material";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -52,29 +53,34 @@ const LoginForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div>
-          username:
-          <input
-            type="text"
-            name="username"
+        <Box>
+          <TextField
+            required
             id="username"
+            name="username"
             value={username}
             onChange={handleLogin}
+            label="Type username here"
+            variant="standard"
           />
-        </div>
-        <div>
-          password:
-          <input
-            type="password"
-            name="password"
+        </Box>
+        <Box>
+          <TextField
+            required
             id="password"
+            name="password"
+            type="password"
             value={password}
             onChange={handleLogin}
+            label="Type password here"
+            variant="standard"
           />
-        </div>
-        <button id="login-button" type="submit">
-          Login
-        </button>
+        </Box>
+        <Box sx={{ marginTop: 2 }}>
+          <Button id="login-button" variant="outlined" type="submit">
+            Login
+          </Button>
+        </Box>
       </form>
     </div>
   );

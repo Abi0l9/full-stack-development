@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import Notification from "../Notification";
 import { groupBlogsByAuthor } from "../../utils";
-import { Link, useMatch } from "react-router-dom";
+import { Link } from "@mui/material";
 
-function UsersList({ user, handleLogout }) {
+function UsersList() {
   const blogs = useSelector((state) => state.blogs);
   const groupedBlogs = groupBlogsByAuthor(blogs);
 
@@ -12,10 +12,6 @@ function UsersList({ user, handleLogout }) {
     <div>
       <h2>Users</h2>
       <Notification />
-      <div>
-        <strong>{user.name}</strong> logged in!
-        <button onClick={handleLogout}>Logout</button>
-      </div>
       <table>
         <tbody>
           <tr>
@@ -27,7 +23,9 @@ function UsersList({ user, handleLogout }) {
           {groupedBlogs?.map(({ author, id, blogsNum }) => (
             <tr key={id}>
               <td>
-                <Link to={`/users/${id}`}>{author}</Link>
+                <Link underline="hover" href={`/users/${id}`}>
+                  {author}
+                </Link>
               </td>
               <td>{blogsNum}</td>
             </tr>
