@@ -10,7 +10,6 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import UsersList from "./components/UserView/UsersList";
 import Home from "./components/Home";
 import User from "./components/UserView/User";
-import LoggedInHeader from "./components/LoginView/LoggedInHeader";
 import SingleBlog from "./components/BlogView/SingleBlog";
 import Menu from "./components/Menu";
 
@@ -94,7 +93,6 @@ const App = () => {
   return (
     <div>
       <Menu setUser={setUser} />
-      {/* {!user.name ? null : <LoggedInHeader setUser={setUser} />} */}
       <Routes>
         <Route
           path="/"

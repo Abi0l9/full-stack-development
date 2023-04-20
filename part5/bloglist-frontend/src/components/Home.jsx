@@ -11,7 +11,7 @@ function Home({ user, deleteSingleBlog, updateLikesField }) {
 
   return (
     <div>
-      <Box sx={{}}>
+      <Box>
         <Typography variant="h4">Blog app</Typography>
         <Toggable buttonText="Add blog" ref={blogFormRef}>
           <NewBlog blogFormRef={blogFormRef} />

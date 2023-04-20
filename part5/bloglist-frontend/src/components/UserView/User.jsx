@@ -1,6 +1,6 @@
 import { Box, Link } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
 const User = () => {
   const blogs = useSelector((state) => state.blogs);
