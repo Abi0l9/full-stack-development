@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldiIsImlkIjoiNjNlYTAwNWYwMWUyMjI4OTg3ODA2ODA3IiwiaWF0IjoxNjgxOTA4OTEzLCJleHAiOjE2ODE5MTI1MTN9.mLl7yzU9qupgS4CPOIXot_-T-0Q537oqeZPQn3CL8q0
+
+{
+    "title": "Zaynab",
+    "author": "Khalifah",
+    "url": "",
+    "likes": "2"
+}

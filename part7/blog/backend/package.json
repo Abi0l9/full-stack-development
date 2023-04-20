@@ -1,0 +1,45 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "An online blog for people to post about their favourite blogs",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit",
+    "lint": "npx eslint index.js",
+    "start:test": "cross-env NODE_ENV=test nodemon index.js",
+    "trace": "node --trace-warnings index.js",
+    "dev": "cross-env NODE_ENV=production nodemon --openssl-legacy-provider index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Abi0l9/full-stack-development.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "Abi0l9",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abi0l9/full-stack-development/issues"
+  },
+  "homepage": "https://github.com/Abi0l9/full-stack-development#readme",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^8.31.0",
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.3",
+    "mongoose-unique-validator": "^3.1.0",
+    "uuid": "^9.0.0"
+  }
+}

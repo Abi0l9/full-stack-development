@@ -1,0 +1,7 @@
+POST  http://localhost:3003/api/blogs/63ea00fd01e2228987806814/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldiIsImlkIjoiNjNlYTAwNWYwMWUyMjI4OTg3ODA2ODA3IiwiaWF0IjoxNjgxOTA4OTEzLCJleHAiOjE2ODE5MTI1MTN9.mLl7yzU9qupgS4CPOIXot_-T-0Q537oqeZPQn3CL8q0
+
+{
+    "comment": "This is a beautiful blog 1"
+}
