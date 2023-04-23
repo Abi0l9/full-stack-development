@@ -101,6 +101,7 @@ const typeDefs = `
     authorsCount: Int!
     allBook: [Book!]!
     allAuthors: [AllAuthors!]!
+    allBooks(author: String!) : [Book]!
   }
 
 
@@ -135,6 +136,9 @@ const resolvers = {
         };
       });
       return result;
+    },
+    allBooks: (root, args) => {
+      return books.filter((book) => book.author === args.author);
     },
   },
 };
