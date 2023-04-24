@@ -1,8 +1,20 @@
+import { useQuery } from "@apollo/client";
+import { ALL_AUTHORS } from "../queries";
+
 const Authors = (props) => {
+  const result = useQuery(ALL_AUTHORS, {
+    pollInterval: 2000,
+  });
+
   if (!props.show) {
     return null;
   }
-  const { authors } = props;
+
+  if (result.loading) {
+    return null;
+  }
+
+  const authors = result.data.allAuthors;
 
   return (
     <div>
