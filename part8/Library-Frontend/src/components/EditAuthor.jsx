@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client";
 import React from "react";
 import { EDIT_AUTHOR } from "../queries";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Select, MenuItem } from "@mui/material";
 
-function EditAuthor() {
+function EditAuthor({ authors }) {
   const [editAuthor] = useMutation(EDIT_AUTHOR);
 
   const [name, setName] = React.useState("");
@@ -31,14 +31,28 @@ function EditAuthor() {
       <h3>EditAuthor</h3>
       <form onSubmit={handleSubmit}>
         <Box>
-          <TextField
+          <Select
             variant="standard"
             label="name"
             name="name"
             id="name"
             value={name}
             onChange={handleChange}
-          />
+          >
+            {authors.map((author) => (
+              <MenuItem key={author} value={author}>
+                {author}
+              </MenuItem>
+            ))}
+          </Select>
+          {/* <TextField
+            variant="standard"
+            label="name"
+            name="name"
+            id="name"
+            value={name}
+            onChange={handleChange}
+          /> */}
         </Box>
         <Box>
           <TextField

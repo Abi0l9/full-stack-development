@@ -38,7 +38,7 @@ const Authors = (props) => {
         </tbody>
       </table>
       <Box sx={{ mt: 2 }}>
-        <EditAuthor />
+        <EditAuthor authors={authors} />
       </Box>
     </div>
   );
