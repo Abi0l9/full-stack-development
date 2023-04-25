@@ -95,6 +95,7 @@ let books = [
 const typeDefs = `
     type AllAuthors {
         name: String!
+		born: String
         booksCount: Int!
     }
 
@@ -137,9 +138,11 @@ const resolvers = {
         const booksCount = books.filter((book) => book.author === author.name);
         return {
           name: author.name,
+          born: author.born,
           booksCount: booksCount.length,
         };
       });
+
       return result;
     },
     allBooks: (root, args) => {
@@ -173,6 +176,8 @@ const resolvers = {
     },
     editAuthor: (root, args) => {
       const authorExists = authors.find((author) => author.name === args.name);
+      console.log(args);
+
       if (!authorExists) return null;
 
       const updatedAuthor = { ...authorExists, born: args.setBornTo };

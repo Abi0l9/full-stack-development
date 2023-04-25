@@ -18,7 +18,7 @@ const parseArguments = (args: string[]): number[] => {
   if (valsCheck) {
     const pars = rest.map((el) => Number(el));
 
-    let target = pars.pop()!;
+    const target = pars.pop() as number;
 
     return [target, ...pars];
   } else {
@@ -26,14 +26,29 @@ const parseArguments = (args: string[]): number[] => {
   }
 };
 
-const calculateExercises = (args: number[], target: number): Result => {
+export const calculateExercises = (args: number[], target: number): Result => {
   const periodLength = args.length;
   const average = args.reduce((acc, value) => acc + value, 0) / args.length;
   const trainingDays = args.filter((day) => day > 0).length;
-  const success = average >= target;
 
-  const avgFixed = +average.toFixed(1);
-  const rating = avgFixed < 1 ? 1 : avgFixed > 1 && avgFixed < 2 ? 2 : 3;
+  // const avgFixed = +average.toFixed(1);
+  const good = 3;
+  const mid = 2;
+  const bad = 1;
+
+  let rating = 0;
+
+  if ((trainingDays / target) * 3 <= bad) {
+    rating = bad;
+  } else if ((trainingDays / target) * 3 <= mid) {
+    rating = mid;
+  } else if ((trainingDays / target) * 3 <= good) {
+    rating = good;
+  } else if (target < trainingDays) {
+    rating = good;
+  }
+
+  const success = rating <= 2 ? false : true;
 
   let ratingDescription = "";
   if (rating === 1) {
@@ -56,10 +71,9 @@ const calculateExercises = (args: number[], target: number): Result => {
 };
 
 try {
-  let target: number;
-  let days: number[];
-  [target, ...days] = parseArguments(process.argv);
-  // const target = parseArguments(process.argv)
+  // const target: number;
+  // const days: number[];
+  const [target, ...days] = parseArguments(process.argv);
   console.log(calculateExercises(days, target));
 } catch (error) {
   let errorMsg = "Something happened :";

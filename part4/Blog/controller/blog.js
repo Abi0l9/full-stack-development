@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const Blog = require("../models/blogModel");
 const User = require("../models/user");
 const userExtractor = require("../utils/middleware").userExtractor;
+const { v1: uuidv1 } = require("uuid");
+
+const id = uuidv1();
 
 blogRouter.get("/info", (req, res) => res.send("Welcome!"));
 blogRouter.get("", async (request, response) => {
@@ -72,9 +75,10 @@ blogRouter.post("/:blogId/comments", async (request, response) => {
   const blog = await Blog.findById(blogId);
 
   if (blog) {
-    blog.comments = blog.comments.concat(body);
+    const newData = { ...body, id };
+    blog.comments = blog.comments.concat(newData);
     await blog.save();
-    response.status(200).json(body).end();
+    return response.status(200).json(newData).end();
   } else {
     return response.status(404).json({ message: "blog not found" }).end();
   }

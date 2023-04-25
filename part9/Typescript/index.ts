@@ -1,5 +1,7 @@
 import express from "express";
 import { calculateBmi } from "./bmiCalculator";
+import { calculateExercises } from "./exerciseCalculator";
+
 import { isNumber } from "./utils";
 
 const app = express();
@@ -16,6 +18,24 @@ app.get("/bmi", (request, response) => {
   }
 
   return response.status(200).json({ weight, height, bmi }).end();
+});
+
+app.post("/exercises", (request, response) => {
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { daily_exercises, target } = request.body;
+
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!daily_exercises || !target || !daily_exercises.length) {
+    return response.status(400).json({ error: "parameters missing" }).end();
+  }
+
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const result = calculateExercises(daily_exercises, target);
+
+  return response
+    .status(200)
+    .json({ ...result })
+    .end();
 });
 
 const PORT = 3003;
