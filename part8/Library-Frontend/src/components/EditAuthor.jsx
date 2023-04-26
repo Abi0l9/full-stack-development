@@ -40,19 +40,11 @@ function EditAuthor({ authors }) {
             onChange={handleChange}
           >
             {authors.map((author) => (
-              <MenuItem key={author} value={author}>
-                {author}
+              <MenuItem key={author.name} value={author.name}>
+                {author.name}
               </MenuItem>
             ))}
           </Select>
-          {/* <TextField
-            variant="standard"
-            label="name"
-            name="name"
-            id="name"
-            value={name}
-            onChange={handleChange}
-          /> */}
         </Box>
         <Box>
           <TextField
