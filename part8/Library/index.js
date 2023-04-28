@@ -1,8 +1,12 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v1: uuid } = require("uuid");
+const Author = require("./models/Author");
+const Book = require("./models/Book");
 
 const id = uuid();
+
+require("./db");
 
 let authors = [
   {
@@ -105,11 +109,13 @@ const typeDefs = `
     allBook: [Book!]!
     allAuthors: [AllAuthors!]!
     allBooks(author: String, genres: String) : [Book!]
+    authorsList: [Author]
   }
 
   type Mutation {
     addBook(title: String!, author: String!, published: Int!, genres: [String!]!) : [Book!]!
     editAuthor(name: String!, setBornTo: Int!) : Author
+    addAuthor(name: String!, born: Int!) : Author
   }
 
   type Author {
@@ -121,7 +127,7 @@ const typeDefs = `
   type Book {
     title: String!
     published: String!
-    author: String!
+    author: Author!
     id: String!
     genres: [String!]!
   }
@@ -130,9 +136,16 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    booksCount: () => books.length,
-    authorsCount: () => authors.length,
-    allBook: () => books,
+    booksCount: async () => {
+      const books = await Book.find({});
+      return books.length;
+    },
+    authorsCount: async () => {
+      const authors = await Author.find({});
+      return authors.length;
+    },
+    allBook: async () => Book.find({}),
+
     allAuthors: () => {
       const result = authors.map((author) => {
         const booksCount = books.filter((book) => book.author === author.name);
@@ -145,6 +158,7 @@ const resolvers = {
 
       return result;
     },
+    authorsList: async () => Author.find({}),
     allBooks: (root, args) => {
       const authorsQuery = args.author;
       const genresQuery = args.genres;
@@ -185,6 +199,20 @@ const resolvers = {
         author.name === args.name ? updatedAuthor : author
       );
       return updatedAuthor;
+    },
+    addAuthor: async (root, args) => {
+      const authorExists = await Author.findOne({ name: args.name });
+
+      if (authorExists) return null;
+
+      const newAuthor = new Author({ ...args });
+      try {
+        await newAuthor.save();
+      } catch (error) {
+        console.log(error);
+      }
+
+      return newAuthor;
     },
   },
 };
