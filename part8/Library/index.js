@@ -109,11 +109,11 @@ const typeDefs = `
     allBook: [Book!]!
     allAuthors: [AllAuthors!]!
     allBooks(author: String, genres: String) : [Book!]
-    authorsList: [Author]
+    authorsList: [Author]!
   }
 
   type Mutation {
-    addBook(title: String!, author: String!, published: Int!, genres: [String!]!) : [Book!]!
+    addBook(title: String!, author: String!, published: Int!, genres: [String!]!) : Book
     editAuthor(name: String!, setBornTo: Int!) : Author
     addAuthor(name: String!, born: Int!) : Author
   }
@@ -126,7 +126,7 @@ const typeDefs = `
 
   type Book {
     title: String!
-    published: String!
+    published: Int!
     author: Author!
     id: String!
     genres: [String!]!
@@ -144,7 +144,20 @@ const resolvers = {
       const authors = await Author.find({});
       return authors.length;
     },
-    allBook: async () => Book.find({}),
+    allBook: async () => {
+      const bookList = await Book.find({});
+      const all = bookList.map(async (book) => {
+        const author = await Author.findById(book.author.toString());
+        return {
+          id: book._id.toString(),
+          title: book.title,
+          published: book.published,
+          genres: book.genres,
+          author,
+        };
+      });
+      return all;
+    },
 
     allAuthors: () => {
       const result = authors.map((author) => {
@@ -159,34 +172,41 @@ const resolvers = {
       return result;
     },
     authorsList: async () => Author.find({}),
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
       const authorsQuery = args.author;
       const genresQuery = args.genres;
 
+      const savedBooks = await Book.find({});
+      const author = await Author.findOne({ name: args.author });
+      const authorId = author._id.toString();
+
       if (authorsQuery && genresQuery) {
-        return books.filter(
+        return savedBooks.filter(
           (book) =>
-            book.author === args.author && book.genres.includes(genresQuery)
+            book.author.toString() === authorId &&
+            book.genres.includes(genresQuery)
         );
       } else if (authorsQuery) {
-        return books.filter((book) => book.author === args.author);
+        return savedBooks.filter((book) => book.author.toString() === authorId);
       } else if (genresQuery) {
-        return books.filter((book) => book.genres.includes(genresQuery));
+        return savedBooks.filter((book) => book.genres.includes(genresQuery));
       }
     },
   },
   Mutation: {
-    addBook: (root, args) => {
-      const body = { ...args, id };
-      const authorExists = authors.find(
-        (author) => author.name === args.author
-      );
+    addBook: async (root, args) => {
+      const authorExists = await Author.findOne({ name: "Monsur Oyedeji" });
+
       if (!authorExists) {
-        authors = authors.concat({ name: args.author, born: null, id });
+        return {
+          error: "Author not found",
+        };
       }
 
-      books = books.concat(body);
-      return books;
+      const newBook = new Book({ ...args, author: authorExists });
+      await newBook.save();
+
+      return newBook;
     },
     editAuthor: (root, args) => {
       const authorExists = authors.find((author) => author.name === args.name);
