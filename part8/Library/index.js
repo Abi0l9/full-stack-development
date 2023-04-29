@@ -3,6 +3,7 @@ const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v1: uuid } = require("uuid");
 const Author = require("./models/Author");
 const Book = require("./models/Book");
+const { GraphQLError } = require("graphql");
 
 const id = uuid();
 
@@ -195,44 +196,60 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const authorExists = await Author.findOne({ name: "Monsur Oyedeji" });
+      const authorExists = await Author.findOne({ name: args.author });
+
+      let author;
 
       if (!authorExists) {
-        return {
-          error: "Author not found",
-        };
+        const newAuthor = new Author({ name: args.author });
+        await newAuthor.save();
+        author = newAuthor;
       }
 
-      const newBook = new Book({ ...args, author: authorExists });
-      await newBook.save();
-
-      return newBook;
+      try {
+        const newBook = new Book({ ...args, author: authorExists || author });
+        await newBook.save();
+        return newBook;
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
     },
-    editAuthor: (root, args) => {
-      const authorExists = authors.find((author) => author.name === args.name);
-      console.log(args);
-
-      if (!authorExists) return null;
-
-      const updatedAuthor = { ...authorExists, born: args.setBornTo };
-      authors = authors.map((author) =>
-        author.name === args.name ? updatedAuthor : author
-      );
-      return updatedAuthor;
-    },
-    addAuthor: async (root, args) => {
+    editAuthor: async (root, args) => {
       const authorExists = await Author.findOne({ name: args.name });
 
-      if (authorExists) return null;
+      if (!authorExists) {
+        throw new GraphQLError("Author not found", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.name,
+          },
+        });
+      }
 
+      if (args.setBornTo) {
+        await Author.findByIdAndUpdate(authorExists._id.toString(), {
+          born: args.setBornTo,
+        });
+      } else {
+        throw new GraphQLError("setBornTo field cannot be empty", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.setBornTo,
+          },
+        });
+      }
+      return { name: args.name, born: args.setBornTo };
+    },
+    addAuthor: async (root, args) => {
       const newAuthor = new Author({ ...args });
       try {
         await newAuthor.save();
+        return newAuthor;
       } catch (error) {
-        console.log(error);
+        if (error) {
+          throw new GraphQLError(error.message);
+        }
       }
-
-      return newAuthor;
     },
   },
 };
