@@ -4,6 +4,8 @@ const { v1: uuid } = require("uuid");
 const Author = require("./models/Author");
 const Book = require("./models/Book");
 const { GraphQLError } = require("graphql");
+const jwt = require("jsonwebtoken");
+const User = require("./models/User");
 
 const id = uuid();
 
@@ -100,8 +102,18 @@ let books = [
 const typeDefs = `
     type AllAuthors {
         name: String!
-		born: String
+		    born: String
         booksCount: Int!
+    }
+
+    type User {
+      username: String!
+      favoriteGenre: String!
+      id: ID!
+    }
+
+    type Token {
+      value: String!
     }
 
   type Query {
@@ -111,12 +123,15 @@ const typeDefs = `
     allAuthors: [AllAuthors!]!
     allBooks(author: String, genres: String) : [Book!]
     authorsList: [Author]!
+    me: User
   }
 
   type Mutation {
     addBook(title: String!, author: String!, published: Int!, genres: [String!]!) : Book
     editAuthor(name: String!, setBornTo: Int!) : Author
     addAuthor(name: String!, born: Int!) : Author
+    createUser(username: String!, favoriteGenre: String!): User
+    login(username: String!, password: String!): Token
   }
 
   type Author {
@@ -179,6 +194,9 @@ const resolvers = {
 
       const savedBooks = await Book.find({});
       const author = await Author.findOne({ name: args.author });
+      if (!author) {
+        throw new GraphQLError("Author not found!");
+      }
       const authorId = author._id.toString();
 
       if (authorsQuery && genresQuery) {
@@ -250,6 +268,19 @@ const resolvers = {
           throw new GraphQLError(error.message);
         }
       }
+    },
+    createUser: async (root, args) => {
+      const body = { ...args };
+      const newUser = new User(body);
+      await newUser.save().catch((error) => {
+        throw new GraphQLError("Creating a new User failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            error,
+          },
+        });
+      });
+      return newUser;
     },
   },
 };
