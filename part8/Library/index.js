@@ -6,6 +6,7 @@ const Book = require("./models/Book");
 const { GraphQLError } = require("graphql");
 const jwt = require("jsonwebtoken");
 const User = require("./models/User");
+const { getToken } = require("./utils/middleware");
 
 const id = uuid();
 
@@ -211,6 +212,9 @@ const resolvers = {
         return savedBooks.filter((book) => book.genres.includes(genresQuery));
       }
     },
+    me: (root, args, context) => {
+      return context.currentUser;
+    },
   },
   Mutation: {
     addBook: async (root, args) => {
@@ -282,6 +286,25 @@ const resolvers = {
       });
       return newUser;
     },
+    login: async (root, args) => {
+      const userExists = await User.findOne({ username: args.username });
+
+      if (!userExists || args.password !== "secret") {
+        throw new GraphQLError("Invalid Username/ password", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+          },
+        });
+      }
+
+      const userForToken = {
+        username: userExists.username,
+        id: userExists.id,
+      };
+
+      const token = { value: jwt.sign(userForToken, process.env.SECRET) };
+      return token;
+    },
   },
 };
 
@@ -292,6 +315,15 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({ req, res }) => {
+    const auth = req ? req.headers.authorization : null;
+    if (auth && auth.startsWith("Bearer ")) {
+      const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET);
+
+      const currentUser = await User.findById(decodedToken.id);
+      return { currentUser };
+    }
+  },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
