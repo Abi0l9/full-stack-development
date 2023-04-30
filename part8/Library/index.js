@@ -217,7 +217,17 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, { currentUser }) => {
+      if (!currentUser) {
+        throw new GraphQLError(
+          "You have no permission to perform this action",
+          {
+            extensions: {
+              code: "AUTHENTICATION_FAILED",
+            },
+          }
+        );
+      }
       const authorExists = await Author.findOne({ name: args.author });
 
       let author;
@@ -236,7 +246,7 @@ const resolvers = {
         throw new GraphQLError(error.message);
       }
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, { currentUser }) => {
       const authorExists = await Author.findOne({ name: args.name });
 
       if (!authorExists) {
@@ -246,6 +256,17 @@ const resolvers = {
             invalidArgs: args.name,
           },
         });
+      }
+
+      if (!currentUser) {
+        throw new GraphQLError(
+          "You have no permission to perform this action",
+          {
+            extensions: {
+              code: "AUTHENTICATION_FAILED",
+            },
+          }
+        );
       }
 
       if (args.setBornTo) {
