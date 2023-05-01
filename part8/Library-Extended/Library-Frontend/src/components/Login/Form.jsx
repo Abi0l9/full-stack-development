@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { LOGIN } from "../../queries";
 import { Box, Button, TextField, Typography } from "@mui/material";
 
-const LoginForm = ({ setToken }) => {
+const LoginForm = ({ setPage, setToken, show }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, result] = useMutation(LOGIN, {
@@ -12,21 +12,26 @@ const LoginForm = ({ setToken }) => {
     },
   });
 
-  useEffect(() => {
-    if (result?.data) {
-      const token = result.data.login.value;
-      setToken(token);
-      localStorage.setItem("token", token);
-    }
-  });
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
     login({ variables: { username, password } });
     setUsername("");
     setPassword("");
+    setPage("authors");
   };
+
+  useEffect(() => {
+    if (result?.data) {
+      const token = result?.data?.login.value;
+      setToken(token);
+      localStorage.setItem("token", token);
+    }
+  }, [result?.data?.login.value]); // eslint-disable-line
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <div>

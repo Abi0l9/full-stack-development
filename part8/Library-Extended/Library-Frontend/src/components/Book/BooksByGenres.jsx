@@ -1,29 +1,14 @@
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
-
-const Books = (props) => {
-  const result = useQuery(ALL_BOOKS, {
-    pollInterval: 2000,
-  });
-
-  if (!props.show) {
-    return null;
-  }
-
-  if (result.loading) {
-    return null;
-  }
-
-  const books = result?.data?.allBook;
-
+const BooksByGenres = ({ selectedGenre, books }) => {
   return (
     <div>
-      <h2>books</h2>
-
+      <div>
+        in genre <b>{selectedGenre}</b>
+      </div>
       <table>
         <tbody>
           <tr>
             <th>s/n</th>
+            <th>title</th>
             <th>author</th>
             <th>published</th>
           </tr>
@@ -41,4 +26,4 @@ const Books = (props) => {
   );
 };
 
-export default Books;
+export default BooksByGenres;

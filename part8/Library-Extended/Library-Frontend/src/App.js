@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Authors from "./components/Authors";
-import Books from "./components/Books";
-import NewBook from "./components/NewBook";
+import Books from "./components/Book/Books";
+import NewBook from "./components/Book/NewBook";
 import LoginForm from "./components/Login/Form";
 import { useApolloClient } from "@apollo/client";
 
@@ -10,35 +10,45 @@ const App = () => {
   const [token, setToken] = useState("");
   const client = useApolloClient();
 
+  const logout = () => {
+    setToken(null);
+    client.resetStore();
+    localStorage.clear();
+    setPage("login");
+  };
+
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     setToken(savedToken);
   }, [token]);
-
-  if (!token) {
-    return <LoginForm setToken={setToken} />;
-  }
-
-  const logout = () => {
-    localStorage.clear();
-    setToken(null);
-    client.resetStore();
-  };
 
   return (
     <div>
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
-        <button onClick={() => setPage("add")}>add book</button>
-        <button onClick={logout}>Logout</button>
+        {!token ? (
+          <button onClick={() => setPage("login")}>login</button>
+        ) : (
+          <span>
+            <button onClick={() => setPage("add")}>add book</button>
+
+            <button onClick={logout}>Logout</button>
+          </span>
+        )}
       </div>
 
-      <Authors show={page === "authors"} />
+      <Authors token={token} show={page === "authors"} />
 
       <Books show={page === "books"} />
 
       <NewBook show={page === "add"} />
+
+      <LoginForm
+        setPage={setPage}
+        setToken={setToken}
+        show={page === "login"}
+      />
     </div>
   );
 };
