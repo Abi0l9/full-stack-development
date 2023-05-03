@@ -1,14 +1,17 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../../queries";
+import { ALL_BOOKS, GET_GENRES } from "../../queries";
 import { useEffect, useState } from "react";
 import BooksByGenres from "./BooksByGenres";
 
 const Books = (props) => {
   const [genres, setGenres] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("");
-  const [booksByGenres, setbooksByGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("all");
   const result = useQuery(ALL_BOOKS, {
     pollInterval: 2000,
+  });
+
+  const { data } = useQuery(GET_GENRES, {
+    variables: { genres: selectedGenre },
   });
 
   const books = result?.data?.allBook;
@@ -26,16 +29,6 @@ const Books = (props) => {
     }
   }, [books]);
 
-  useEffect(() => {
-    if (selectedGenre) {
-      const filteredBooks = books.filter((book) =>
-        book.genres.includes(selectedGenre)
-      );
-
-      setbooksByGenres(filteredBooks);
-    }
-  }, [books, selectedGenre]);
-
   if (!props.show) {
     return null;
   }
@@ -44,11 +37,15 @@ const Books = (props) => {
     return null;
   }
 
+  const handleClicked = (e) => {
+    setSelectedGenre(e.target.textContent);
+  };
+
   return (
     <div>
       <h2>books</h2>
       {selectedGenre !== "all" ? (
-        <BooksByGenres books={booksByGenres} selectedGenre={selectedGenre} />
+        <BooksByGenres books={data?.getGenres} selectedGenre={selectedGenre} />
       ) : (
         <table>
           <tbody>
@@ -71,7 +68,7 @@ const Books = (props) => {
       )}
       {genres?.map((genre) => (
         <span key={genre}>
-          <button onClick={() => setSelectedGenre(genre)}>{genre}</button>
+          <button onClick={handleClicked}>{genre}</button>
         </span>
       ))}
       <button onClick={() => setSelectedGenre("all")}>all genres</button>
