@@ -5,7 +5,7 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  createHttpLink,
+  HttpLink,
   split,
 } from "@apollo/client";
 
@@ -25,7 +25,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const httpLink = createHttpLink({
+const httpLink = new HttpLink({
   uri: "http://localhost:4000",
 });
 
@@ -36,7 +36,7 @@ const splitLink = split(
     const definition = getMainDefinition(query);
     return (
       definition.kind === "OperationDefinition" &&
-      definition.operation === "subscrption"
+      definition.operation === "subscription"
     );
   },
   wsLink,
@@ -44,8 +44,8 @@ const splitLink = split(
 );
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
   link: splitLink,
+  cache: new InMemoryCache(),
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
