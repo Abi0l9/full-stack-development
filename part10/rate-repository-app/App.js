@@ -10,10 +10,7 @@ export default function App() {
       <Main />
       <RepositoryList />
     </View>
-    // <View style={styles.container}>
-    //   <Text>App works very fine!</Text>
-    //   <StatusBar style="auto" />
-    // </View>
+  
   );
 }
 
