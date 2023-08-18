@@ -1,12 +1,12 @@
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import Constants from "expo-constants";
+import { Link } from "react-router-native";
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     paddingBottom: 10,
     paddingLeft: 10,
-    backgroundColor: "#24292e",
   },
   text: {
     fontWeight: "bold",
@@ -16,14 +16,16 @@ const styles = StyleSheet.create({
   // ...
 });
 
-const AppBarTab = ({ tabName }) => {
+const AppBarTab = ({ tabName, link }) => {
   const handlePress = () => {
     console.log("pressed");
   };
   return (
     <View style={styles.container}>
       <Pressable onPress={handlePress}>
-        <Text style={styles.text}>{tabName}</Text>
+        <Link to={link}>
+          <Text style={styles.text}>{tabName}</Text>
+        </Link>
       </Pressable>
     </View>
   );
