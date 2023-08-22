@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import { /*Text,*/ StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Route, Routes, Navigate } from "react-router-native";
 import AppBar from "./AppBar";
 import RepositoryList from "../components/RepositoryList";
@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
-  const themes = [Theme, styles.container];
+  const theme = [styles.container, Theme.font];
   return (
-    <View style={themes}>
+    <View style={theme}>
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />

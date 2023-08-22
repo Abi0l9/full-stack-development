@@ -1,9 +1,13 @@
 import { Platform } from "react-native";
+import androidTheme from "./Theme.android";
+import iosTheme from "./Theme.ios";
+import webTheme from "./Theme.web";
 
 const Theme = Platform.select({
-  ios: () => require("./Theme.ios"),
-  android: () => require("./Theme.android"),
-  web: () => require("./Theme.web"),
-})();
+  ios: iosTheme,
+  android: androidTheme,
+  web: webTheme,
+  default: webTheme,
+});
 
 export default Theme;
