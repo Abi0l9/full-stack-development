@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
-  const theme = [styles.container, Theme.font];
+  const platform = [styles.container, Theme.font];
   return (
-    <View style={theme}>
+    <View style={platform}>
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />
