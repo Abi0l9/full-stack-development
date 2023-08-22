@@ -4,6 +4,7 @@ import { Route, Routes, Navigate } from "react-router-native";
 import AppBar from "./AppBar";
 import RepositoryList from "../components/RepositoryList";
 import SignIn from "./SignIn";
+import Theme from "./Theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -15,8 +16,9 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
+  const themes = [Theme, styles.container];
   return (
-    <View style={styles.container}>
+    <View style={themes}>
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />

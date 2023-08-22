@@ -4,7 +4,7 @@ import TextInput from "./TextInput";
 
 const styles = StyleSheet.create({
   errorText: {
-    color: "red",
+    color: "#d73a4a",
     fontWeight: "bold",
   },
   inputWrapper: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   errorInput: {
     borderWidth: 1,
-    borderColor: "red",
+    borderColor: "#d73a4a",
     borderRadius: 5,
     paddingHorizontal: 8,
     paddingVertical: 10,
