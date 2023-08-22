@@ -19,6 +19,7 @@ const FormikTextInput = ({ name, ...props }) => {
         onBlur={() => helpers.setTouched(true)}
         value={field.value}
         error={showError}
+        secureTextEntry={false}
         {...props}
       />
       {showError && <Text style={styles.errorText}>{meta.error}</Text>}
