@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Formik } from "formik";
 import FormikTextInput from "./FormikTextInput";
+import * as yup from "yup";
 
 const styles = StyleSheet.create({
   container: {
@@ -9,14 +10,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
-  input: {
-    borderRadius: 5,
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    borderColor: "darkgray",
-    borderWidth: 1,
-    marginBottom: 8,
-  },
+
   buttonWrapper: {
     backgroundColor: "#0366d6",
     borderRadius: 5,
@@ -33,24 +27,34 @@ const styles = StyleSheet.create({
 
 const initialValues = { username: "", password: "" };
 
+const validationSchema = yup.object().shape({
+  username: yup.string().min(3).required("Username is required"),
+  password: yup
+    .string()
+    .min(6, "Minimum length is 6")
+    .required("Password is required"),
+});
+
 const SignIn = () => {
   const onSubmit = (values) => {
     console.log(values);
   };
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
       {({ handleSubmit }) => (
         <View style={styles.container}>
           <FormikTextInput
             name="username"
             placeholder="Username"
-            type="text"
             style={styles.input}
           />
           <FormikTextInput
             name="password"
             placeholder="Password"
-            type="password"
             style={styles.input}
             secureTextEntry={true}
           />
